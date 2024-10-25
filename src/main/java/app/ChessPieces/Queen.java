@@ -14,6 +14,6 @@ public class Queen extends ChessPiece{
 
     @Override
     public String getSymbol() {
-        return "Q";
+        return formatSymbol("Q");
     }
 }

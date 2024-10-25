@@ -18,30 +18,31 @@ public class Pawn extends ChessPiece {
             return false;
         }
 
-        if (super.isChessPieceOnMove(chessBoard, toLine, toColumn)){
+        // todo проверять есть ли фигура на линии движения
+//        if (super.isChessPieceOnMove(chessBoard, toLine, toColumn)){
+//            return false;
+//        }
+
+        if (super.currentColumn != toColumn) {
             return false;
         }
 
-        if (super.currentColumn != toColumn){
-            return false;
-        }
-
-        if (Objects.equals(super.color, COLOR_WHITE)){
-            if (toLine > super.currentLine && super.currentLine == 1 && (toLine - super.currentLine) <= 2){
+        if (Objects.equals(super.color, COLOR_WHITE)) {
+            if (toLine > super.currentLine && super.currentLine == 1 && (toLine - super.currentLine) <= 2) {
                 return true;
             }
 
-            if (toLine > super.currentLine && super.currentLine >= 2 && (toLine - super.currentLine) == 1){
+            if (toLine > super.currentLine && super.currentLine >= 2 && (toLine - super.currentLine) == 1) {
                 return true;
             }
         }
 
-        if (Objects.equals(super.color, COLOR_BLACK)){
-            if (super.currentLine > toLine && super.currentLine == 6 && (super.currentLine - toLine) <= 2){
+        if (Objects.equals(super.color, COLOR_BLACK)) {
+            if (super.currentLine > toLine && super.currentLine == 6 && (super.currentLine - toLine) <= 2) {
                 return true;
             }
 
-            if (super.currentLine > toLine && super.currentLine >= 6 && (super.currentLine - toLine) == 1){
+            if (super.currentLine > toLine && super.currentLine >= 6 && (super.currentLine - toLine) == 1) {
                 return true;
             }
         }
@@ -51,6 +52,6 @@ public class Pawn extends ChessPiece {
 
     @Override
     public String getSymbol() {
-        return "P";
+        return formatSymbol("P");
     }
 }

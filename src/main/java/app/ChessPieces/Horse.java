@@ -14,6 +14,6 @@ public class Horse extends ChessPiece {
 
     @Override
     public String getSymbol() {
-        return "H";
+        return formatSymbol("H");
     }
 }

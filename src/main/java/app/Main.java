@@ -1,14 +1,19 @@
 package app;
 
 import app.ChessPieces.*;
+import app.Entity.UserInputEntity;
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    protected static final String COMMAND_MOVE = "move";
-    protected static final String COMMAND_EXIT = "exit";
-    protected static final String COMMAND_REPLAY = "replay";
+    public static final String COMMAND_MOVE = "move";
+    public static final String COMMAND_EXIT = "exit";
+    public static final String COMMAND_REPLAY = "replay";
+    public static final String COMMAND_CASTLING0 = "castling0";
+    public static final String COMMAND_CASTLING7 = "castling7";
+    private static final String MESSAGE_OUTPUT_EXIT = "Завершаем работу.\n-----------------";
+    public static final String[] commands = {COMMAND_MOVE, COMMAND_EXIT, COMMAND_REPLAY, COMMAND_CASTLING0, COMMAND_CASTLING7};
 
     public static void main(String[] args) {
 
@@ -16,45 +21,61 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         showGameRules();
         board.printBoard();
+        System.out.print("Ход игрока " + board.nowPlayer + ":: ");
+
         while (true) {
-            String s = scanner.nextLine();
-            if (s.equals(COMMAND_EXIT)) break;
-            else if (s.equals(COMMAND_REPLAY)) {
+            String scannerInput = scanner.nextLine();
+
+            if (scannerInput.equals(COMMAND_EXIT)) {
+                System.out.println(MESSAGE_OUTPUT_EXIT);
+                System.exit(0);
+            }
+
+            if (scannerInput.equals(COMMAND_REPLAY)) {
                 System.out.println("Заново");
                 board = buildBoard();
                 board.printBoard();
-            } else {
-                if (s.equals("castling0")) {
-                    if (board.castling0()) {
-                        System.out.println("Рокировка удалась");
-                        board.printBoard();
-                    } else {
-                        System.out.println("Рокировка не удалась");
-                    }
-                } else if (s.equals("castling7")) {
-                    if (board.castling7()) {
-                        System.out.println("Рокировка удалась");
-                        board.printBoard();
-                    } else {
-                        System.out.println("Рокировка не удалась");
-                    }
-                } else if (s.contains(COMMAND_MOVE)) {
-                    String[] a = s.split(" ");
-                    try {
-                        int line = Integer.parseInt(a[1]);
-                        int column = Integer.parseInt(a[2]);
-                        int toLine = Integer.parseInt(a[3]);
-                        int toColumn = Integer.parseInt(a[4]);
-                        if (board.moveToPosition(line, column, toLine, toColumn)) {
-                            System.out.println("Игрок " + board.nowPlayer + " сделал ход");
-                            board.printBoard();
-                        } else
-                            System.out.println("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
-                    } catch (Exception e) {
-                        System.out.println("Вы что-то ввели не так, попробуйте ещё раз");
-                    }
+                continue;
+            }
 
+
+            if (scannerInput.equals(COMMAND_CASTLING0)) {
+                if (board.castling0()) {
+                    board.printBoard();
+                    System.out.println("Рокировка удалась");
+                } else {
+                    System.out.println("Рокировка не удалась");
                 }
+                continue;
+            }
+
+            if (scannerInput.equals(COMMAND_CASTLING7)) {
+                if (board.castling7()) {
+                    board.printBoard();
+                    System.out.println("Рокировка удалась");
+                } else {
+                    System.out.println("Рокировка не удалась");
+                }
+                continue;
+            }
+
+            if (!scannerInput.contains(COMMAND_MOVE)) {
+                System.out.println("Команда не найдена");
+                continue;
+            }
+
+            try {
+                UserInputEntity userInputEntity = new UserInputEntity(scannerInput);
+                if (board.moveToPosition(userInputEntity.currentLine, userInputEntity.currentColumn, userInputEntity.toLine, userInputEntity.toColumn)) {
+                    board.printBoard();
+                    System.out.println("Игрок " + board.nowPlayer + " сделал ход");
+                    board.changePlayer();
+                    continue;
+                }
+
+                System.out.println("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
+            } catch (Exception e) {
+                System.out.println("Вы что-то ввели не так, попробуйте ещё раз");
             }
         }
     }
