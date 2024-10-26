@@ -51,7 +51,6 @@ public class ChessBoard {
                 if (board[i][j] == null) {
                     System.out.print(".." + "\t");
                 } else {
-                    //System.out.print(board[i][j].getSymbol() + board[i][j].getColor().substring(0, 1).toLowerCase() + "\t");
                     System.out.print(board[i][j].getSymbol() + "\t");
                 }
             }

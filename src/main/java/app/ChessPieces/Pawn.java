@@ -18,10 +18,9 @@ public class Pawn extends ChessPiece {
             return false;
         }
 
-        // todo проверять есть ли фигура на линии движения
-//        if (super.isChessPieceOnMove(chessBoard, toLine, toColumn)){
-//            return false;
-//        }
+        if (super.isChessPieceOnMove(chessBoard, toLine, toColumn)){
+            return false;
+        }
 
         if (super.currentColumn != toColumn) {
             return false;

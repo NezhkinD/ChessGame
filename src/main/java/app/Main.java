@@ -13,7 +13,6 @@ public class Main {
     public static final String COMMAND_CASTLING0 = "castling0";
     public static final String COMMAND_CASTLING7 = "castling7";
     private static final String MESSAGE_OUTPUT_EXIT = "Завершаем работу.\n-----------------";
-    public static final String[] commands = {COMMAND_MOVE, COMMAND_EXIT, COMMAND_REPLAY, COMMAND_CASTLING0, COMMAND_CASTLING7};
 
     public static void main(String[] args) {
 
@@ -94,7 +93,7 @@ public class Main {
 
     public static ChessBoard buildBoard() {
 
-        // getRandPlayerColor()
+        //String randPlayerColor = getRandPlayerColor();
         ChessBoard board = new ChessBoard(ChessPiece.COLOR_WHITE);
 
         board.board[0][0] = new Rook(ChessPiece.COLOR_WHITE, 0, 0);

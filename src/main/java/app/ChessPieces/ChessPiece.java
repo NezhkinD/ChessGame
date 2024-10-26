@@ -2,7 +2,10 @@ package app.ChessPieces;
 
 import app.ChessBoard;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.OptionalInt;
 
 abstract public class ChessPiece {
 
@@ -61,23 +64,35 @@ abstract public class ChessPiece {
      * Есть ли мешающая фигура на линии передвижения
      */
     public boolean isChessPieceOnMove(ChessBoard chessBoard, int toLine, int toColumn) {
-        ChessPiece chessPiece = chessBoard.board[toLine][toColumn];
-
-        if (chessPiece != null) {
-            return false;
+        if (chessBoard.board[toLine][toColumn] != null) {
+            return true;
         }
 
-        if (currentLine != toLine && currentColumn == toColumn){
-            for (int i = currentLine; i <= toLine; i++) {
+        if (currentLine != toLine){
+            int[] lines = {currentLine, toLine};
+            int maxLine = Arrays.stream(lines).max().getAsInt();
+            int minLine = Arrays.stream(lines).min().getAsInt();
+            for (int i = minLine; i <= maxLine; i++) {
+                if (i == currentLine || i == currentLine){
+                    continue;
+                }
+
                 if (chessBoard.board[i][currentColumn] != null) {
                     return true;
                 }
             }
         }
 
-        if (currentColumn != toColumn && currentLine == toLine){
-            for (int i = currentColumn; i <= toColumn; i++) {
-                if (chessBoard.board[currentLine][i] != null) {
+        if (currentColumn != toColumn){
+            int[] columns = {currentColumn, toColumn};
+            int maxColumn = Arrays.stream(columns).max().getAsInt();
+            int minColumn = Arrays.stream(columns).min().getAsInt();
+            for (int i = minColumn; i <= maxColumn; i++) {
+                if (i == currentColumn || i == currentColumn){
+                    continue;
+                }
+
+                if (chessBoard.board[i][currentColumn] != null) {
                     return true;
                 }
             }
