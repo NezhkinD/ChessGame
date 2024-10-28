@@ -1,65 +1,14 @@
-
-import org.junit.Assert;
-import org.junit.Test;
-
+package ChessPieces;
 
 import app.ChessBoard;
 import app.ChessPieces.*;
-import org.junit.runner.RunWith;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import java.util.Optional;
 
-@RunWith(DataProviderRunner.class)
-public class HelloWorldTest {
+abstract public class BaseChessPiecesTest {
+    protected static ChessBoard createBaseBoard(Optional<String> nowPlayerColor) {
 
-
-    @Test
-    @UseDataProvider("loadDataProvider")
-    public void dataTest(String color, int currentLine, int currentColumn, int toLine, int toColumn, boolean expected) {
-        ChessBoard chessBoard = buildBoard(color);
-
-        Pawn pawn = new Pawn(color, currentLine, currentColumn);
-        boolean pieceOnMove = pawn.isChessPieceOnMove(chessBoard, toLine, toColumn);
-        Assert.assertEquals(expected, pieceOnMove);
-    }
-
-    @DataProvider
-    public static Object[][] loadDataProvider() {
-        return new Object[][]{
-                {
-                        ChessPiece.COLOR_WHITE,
-                        1, // currentLine
-                        0, // currentColumn
-                        2, // toLine
-                        0,  // toColumn
-                        true // pieceOnMove
-                },
-                {
-                        ChessPiece.COLOR_BLACK,
-                        6, // currentLine
-                        3, // currentColumn
-                        4, // toLine
-                        5,  // toColumn
-                        false // pieceOnMove
-                },
-                {
-                        ChessPiece.COLOR_WHITE,
-                        1, // currentLine
-                        0, // currentColumn
-                        4, // toLine
-                        0,  // toColumn
-                        false // pieceOnMove
-                }
-        };
-    }
-
-
-    public static ChessBoard buildBoard(String color) {
-
-        ChessBoard board = new ChessBoard(color);
-
+        ChessBoard board = new ChessBoard(nowPlayerColor.orElse(ChessPiece.COLOR_WHITE));
         board.board[0][0] = new Rook(ChessPiece.COLOR_WHITE, 0, 0);
         board.board[0][1] = new Horse(ChessPiece.COLOR_WHITE, 0, 1);
         board.board[0][2] = new Bishop(ChessPiece.COLOR_WHITE, 0, 2);

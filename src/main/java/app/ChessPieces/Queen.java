@@ -8,12 +8,17 @@ public class Queen extends ChessPiece{
     }
 
     @Override
-    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
+    public boolean canMoveToPosition(ChessBoard chessBoard, int toLine, int toColumn) {
         return false;
     }
 
     @Override
     public String getSymbol() {
-        return formatSymbol("Q");
+        return "Q";
+    }
+
+    @Override
+    protected int[][] getPossibleMoves() {
+        return new int[0][];
     }
 }

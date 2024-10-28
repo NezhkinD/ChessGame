@@ -8,7 +8,7 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
+    public boolean canMoveToPosition(ChessBoard chessBoard, int toLine, int toColumn) {
         currentColumn = toLine;
         currentLine = toColumn;
         return false;
@@ -16,6 +16,11 @@ public class Bishop extends ChessPiece {
 
     @Override
     public String getSymbol() {
-        return formatSymbol("B");
+        return "B";
+    }
+
+    @Override
+    protected int[][] getPossibleMoves() {
+        return new int[0][];
     }
 }

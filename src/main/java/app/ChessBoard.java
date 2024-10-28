@@ -1,6 +1,7 @@
 package app;
 
 import app.ChessPieces.*;
+import app.Exception.CannotMoveException;
 
 public class ChessBoard {
     public static final int LINES = 8;
@@ -18,7 +19,7 @@ public class ChessBoard {
         return this.nowPlayer;
     }
 
-    public boolean moveToPosition(int startLine, int startColumn, int endLine, int endColumn) {
+    public boolean moveToPosition(int startLine, int startColumn, int endLine, int endColumn) throws CannotMoveException {
         if (!checkPosition(startLine) || !checkPosition(startColumn)){
             return false;
         }
@@ -27,10 +28,12 @@ public class ChessBoard {
             return false;
         }
 
-        if (board[startLine][startColumn].canMoveToPosition(this, startLine, startColumn, endLine, endColumn)) {
+        if (board[startLine][startColumn].canMoveToPosition(this, endLine, endColumn)) {
+            ChessPiece chessPiece = board[startLine][startColumn];
+            chessPiece.currentLine = endLine;
+            chessPiece.currentColumn = endColumn;
             board[endLine][endColumn] = board[startLine][startColumn]; // if piece can move, we moved a piece
             board[startLine][startColumn] = null; // set null to previous cell
-
             return true;
         }
 
@@ -51,7 +54,7 @@ public class ChessBoard {
                 if (board[i][j] == null) {
                     System.out.print(".." + "\t");
                 } else {
-                    System.out.print(board[i][j].getSymbol() + "\t");
+                    System.out.print(board[i][j].getSymbolWithColor() + "\t");
                 }
             }
             System.out.println();

@@ -2,11 +2,18 @@ package app;
 
 import app.ChessPieces.*;
 import app.Entity.UserInputEntity;
+import app.Exception.CannotMoveException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.Random;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Main {
+    protected static final Logger logger = LogManager.getLogger();
     public static final String COMMAND_MOVE = "move";
     public static final String COMMAND_EXIT = "exit";
     public static final String COMMAND_REPLAY = "replay";
@@ -15,7 +22,6 @@ public class Main {
     private static final String MESSAGE_OUTPUT_EXIT = "Завершаем работу.\n-----------------";
 
     public static void main(String[] args) {
-
         ChessBoard board = buildBoard();
         Scanner scanner = new Scanner(System.in);
         showGameRules();
@@ -71,7 +77,10 @@ public class Main {
                     board.changePlayer();
                     continue;
                 }
+                System.out.println("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
 
+            } catch (CannotMoveException m) {
+                logger.log(Level.WARN, m.getMessage());
                 System.out.println("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
             } catch (Exception e) {
                 System.out.println("Вы что-то ввели не так, попробуйте ещё раз");
