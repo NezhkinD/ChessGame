@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static app.Exception.CannotMoveException.*;
+import static java.lang.Math.abs;
 
 abstract public class ChessPiece {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -183,6 +184,7 @@ abstract public class ChessPiece {
 
     /**
      * Может ли фигура передвинуться по диагонали
+     *
      */
     protected boolean canMoveDiagonal(ChessBoard chessBoard, int fromLine, int toLine, int fromColumn, int toColumn) {
         return true;
@@ -195,49 +197,9 @@ abstract public class ChessPiece {
     abstract protected int[][] getPossibleMoves();
 
     /**
-     * Получить все ходы по горизонтали (если limit <= 0)
-     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) слева и справа с указанным лимитом
-     */
-    public int[][] getAllHorizontalMoves(int limit) {
-        int limitLeft = currentLine - limit;
-        int limitRight = currentLine + limit;
-        List<int[]> moves = new ArrayList<>();
-
-        if (limitLeft < 0) {
-            limitLeft = 0;
-        }
-
-        if (limitRight >= ChessBoard.LINES - 1) {
-            limitRight = ChessBoard.LINES - 1;
-        }
-
-        if (limit <= 0) {
-            limitLeft = 0;
-            limitRight = ChessBoard.LINES - 1;
-        }
-
-        // берем все ходы слева
-        for (int i = currentLine; i >= limitLeft; i--) {
-            if (i == currentLine) {
-                continue;
-            }
-            moves.add(new int[]{i, currentColumn});
-        }
-
-        // берем все ходы справа
-        for (int i = currentLine; i <= limitRight; i++) {
-            if (i == currentLine) {
-                continue;
-            }
-            moves.add(new int[]{i, currentColumn});
-        }
-
-        return moves.toArray(new int[moves.size()][]);
-    }
-
-    /**
      * Получить все ходы по вертикали (если limit <= 0)
      * Если limit > 0 - получим все ходы (не выходящие за пределы доски) сверху и снизу с указанным лимитом
+     * @deprecated
      */
     public int[][] getAllVerticalMoves(int limit) {
         int limitDown = currentColumn - limit;
@@ -277,22 +239,170 @@ abstract public class ChessPiece {
     }
 
     /**
+     * Получить все ходы по горизонтали (если limit <= 0)
+     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) слева и справа с указанным лимитом
+     * @deprecated
+     */
+    public int[][] getAllHorizontalMoves(int limit) {
+        int limitLeft = currentLine - limit;
+        int limitRight = currentLine + limit;
+        List<int[]> moves = new ArrayList<>();
+
+        if (limitLeft < 0) {
+            limitLeft = 0;
+        }
+
+        if (limitRight >= ChessBoard.LINES - 1) {
+            limitRight = ChessBoard.LINES - 1;
+        }
+
+        if (limit <= 0) {
+            limitLeft = 0;
+            limitRight = ChessBoard.LINES - 1;
+        }
+
+        for (int i = currentLine; i >= limitLeft; i--) {
+            if (i == currentLine) {
+                continue;
+            }
+            moves.add(new int[]{i, currentColumn});
+        }
+
+        for (int i = currentLine; i <= limitRight; i++) {
+            if (i == currentLine) {
+                continue;
+            }
+            moves.add(new int[]{i, currentColumn});
+        }
+
+        return moves.toArray(new int[moves.size()][]);
+    }
+
+    /**
+     * Получить все ходы по горизонтали слева (если limit <= 0)
+     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) слева с указанным лимитом
+     */
+    public int[][] getAllHorizontalLeftMoves(int limit) {
+        int limitLeft = currentColumn - limit;
+        List<int[]> moves = new ArrayList<>();
+
+        if (limitLeft < 0) {
+            limitLeft = 0;
+        }
+
+        if (limit <= 0) {
+            limitLeft = 0;
+        }
+
+        for (int i = currentColumn; i >= limitLeft; i--) {
+            if (i == currentColumn) {
+                continue;
+            }
+            moves.add(new int[]{currentLine, i});
+        }
+
+        return moves.toArray(new int[moves.size()][]);
+    }
+
+    /**
+     * Получить все ходы по горизонтали справа(если limit <= 0)
+     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) справа с указанным лимитом
+     */
+    public int[][] getAllHorizontalRightMoves(int limit) {
+        int limitRight = currentColumn + limit;
+        List<int[]> moves = new ArrayList<>();
+
+        if (limitRight >= ChessBoard.COLUMNS - 1) {
+            limitRight = ChessBoard.COLUMNS - 1;
+        }
+
+        if (limit <= 0) {
+            limitRight = ChessBoard.COLUMNS - 1;
+        }
+
+        for (int i = currentColumn; i <= limitRight; i++) {
+            if (i == currentColumn) {
+                continue;
+            }
+            moves.add(new int[]{currentLine, i});
+        }
+
+        return moves.toArray(new int[moves.size()][]);
+    }
+
+    /**
+     * Получить все ходы по вертикали снизу (если limit <= 0)
+     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) снизу с указанным лимитом
+     */
+    public int[][] getAllVerticalDownMoves(int limit) {
+        int limitDown = currentLine - limit;
+        List<int[]> moves = new ArrayList<>();
+
+        if (limitDown < 0) {
+            limitDown = 0;
+        }
+
+        if (limit <= 0) {
+            limitDown = 0;
+        }
+
+        for (int i = currentLine; i >= limitDown; i--) {
+            if (i == currentLine) {
+                continue;
+            }
+            moves.add(new int[]{i, currentColumn});
+        }
+
+        return moves.toArray(new int[moves.size()][]);
+    }
+
+
+    /**
+     * Получить все ходы по вертикали сверху (если limit <= 0)
+     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) сверху с указанным лимитом
+     */
+    public int[][] getAllVerticalUpMoves(int limit) {
+        int limitUp = currentLine + limit;
+        List<int[]> moves = new ArrayList<>();
+
+        if (limitUp >= ChessBoard.LINES - 1) {
+            limitUp = ChessBoard.LINES - 1;
+        }
+
+        if (limit <= 0) {
+            limitUp = ChessBoard.LINES - 1;
+        }
+
+        for (int i = currentLine; i <= limitUp; i++) {
+            if (i == currentLine) {
+                continue;
+            }
+            moves.add(new int[]{i, currentColumn});
+        }
+
+        return moves.toArray(new int[moves.size()][]);
+    }
+
+    /**
      * Получить все ходы по диагонали NE северо-восток (если limit <= 0)
      * Если limit > 0 - получим все ходы, не выходящие за пределы доски, с указанным лимитом
      */
     public int[][] getAllDiagonalNEMoves(int limit) {
-        int limitNE = currentColumn + limit;
-        if (limitNE >= ChessBoard.COLUMNS - 1 || limit <= 0) {
-            limitNE = ChessBoard.COLUMNS - 1;
+        if (limit <= 0) {
+            limit = ChessBoard.COLUMNS;
         }
 
         List<int[]> moves = new ArrayList<>();
 
-        for (int i = currentColumn; i <= limitNE; i++) {
-            if (i == currentColumn) {
-                continue;
+        for (int i = 1; i <= limit; i++) {
+            int newLine = currentLine + i;
+            int newColumn = currentColumn + i;
+
+            if (newLine >= ChessBoard.LINES || newColumn >= ChessBoard.COLUMNS){
+                break;
             }
-            moves.add(new int[]{i, i});
+
+            moves.add(new int[]{newLine, newColumn});
         }
         return moves.toArray(new int[moves.size()][]);
     }
@@ -302,21 +412,21 @@ abstract public class ChessPiece {
      * Если limit > 0 - получим все ходы, не выходящие за пределы доски, с указанным лимитом
      */
     public int[][] getAllDiagonalSWMoves(int limit) {
-        int limitSW = currentColumn - limit;
         if (limit <= 0) {
-            limitSW = -ChessBoard.COLUMNS;
+            limit = ChessBoard.COLUMNS;
         }
 
         List<int[]> moves = new ArrayList<>();
 
-        for (int i = currentColumn; i >= limitSW; i--) {
-            if (i == currentColumn) {
-                continue;
+        for (int i = 1; i <= limit; i++) {
+            int newLine = currentLine - i;
+            int newColumn = currentColumn - i;
+
+            if (newLine < 0 || newColumn< 0){
+                break;
             }
-            if (i < 0){
-                continue;
-            }
-            moves.add(new int[]{i, i});
+
+            moves.add(new int[]{newLine, newColumn});
         }
         return moves.toArray(new int[moves.size()][]);
     }
@@ -337,8 +447,11 @@ abstract public class ChessPiece {
             if (i == currentLine) {
                 continue;
             }
+
             int column = (currentColumn - i) + currentLine;
-           // int column = limitNW - i + 1;
+            if (column < 0){
+                continue;
+            }
 
             moves.add(new int[]{i, column});
         }
@@ -369,71 +482,6 @@ abstract public class ChessPiece {
             }
             moves.add(new int[]{i, column});
         }
-        return moves.toArray(new int[moves.size()][]);
-    }
-
-
-    /**
-     * Получить все ходы по диагонали (если limit <= 0)
-     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) сверху и снизу с указанным лимитом
-     */
-    public int[][] getAllDiagonalMoves(int limit) {
-        int limitNE = currentColumn + limit;
-        int limitSW = currentColumn - limit;
-        int limitNW = currentLine + limit;
-        int limitSE = currentLine - limit;
-
-        List<int[]> moves = new ArrayList<>();
-
-
-        if (limitNE >= ChessBoard.COLUMNS - 1) {
-            limitNE = ChessBoard.COLUMNS - 1;
-        }
-
-        if (limitSW <= 0) {
-            limitSW = 0;
-        }
-
-        if (limitNW >= ChessBoard.COLUMNS - 1) {
-            limitNW = ChessBoard.COLUMNS - 1;
-        }
-
-        if (limitSE <= 0) {
-            limitSE = 0;
-        }
-
-        // берем все ходы NE (северо-восток)
-        for (int i = currentColumn; i <= limitNE; i++) {
-            if (i == currentColumn) {
-                continue;
-            }
-            moves.add(new int[]{i, i});
-        }
-
-        // берем все ходы SW (юго-запад)
-        for (int i = currentColumn; i >= limitSW; i--) {
-            if (i == currentColumn) {
-                continue;
-            }
-            moves.add(new int[]{i, i});
-        }
-
-        // берем все ходы NW (северо-запад)
-        for (int i = currentLine; i <= limitNW; i++) {
-            if (i == currentLine) {
-                continue;
-            }
-            moves.add(new int[]{i, limitNW - i + 1});
-        }
-
-        // берем все ходы SE (юго-восток)
-        for (int i = currentLine; i > limitSE; i--) {
-            if (i == currentLine) {
-                continue;
-            }
-            moves.add(new int[]{i, (currentColumn - i) + currentLine});
-        }
-
         return moves.toArray(new int[moves.size()][]);
     }
 }
