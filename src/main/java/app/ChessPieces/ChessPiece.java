@@ -1,15 +1,14 @@
 package app.ChessPieces;
 
 import app.ChessBoard;
+import app.Entity.MoveEntity;
+import app.Exception.CannotAttackException;
 import app.Exception.CannotMoveException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+import static app.Exception.CannotAttackException.MESSAGE_NOT_PIECE_TO_ATTACK;
 import static app.Exception.CannotMoveException.*;
-import static java.lang.Math.abs;
 
 abstract public class ChessPiece {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -38,6 +37,12 @@ abstract public class ChessPiece {
     public int currentLine;
     public int currentColumn;
 
+    abstract public boolean canMoveToPosition(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotMoveException;
+
+    abstract public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException;
+
+    abstract public String getSymbol();
+
     public ChessPiece(String color, int currentLine, int currentColumn) {
         this.color = color;
         this.currentLine = currentLine;
@@ -46,62 +51,6 @@ abstract public class ChessPiece {
 
     public String getColor() {
         return this.color;
-    }
-
-    /**
-     * Проверяем выходим ли за рамки доски
-     */
-    public boolean checkBoardLimits(int toLine, int toColumn) {
-        if (toLine >= ChessBoard.LINES || toLine < 0) {
-            return true;
-        }
-
-        if (toColumn >= ChessBoard.COLUMNS || toColumn < 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Есть ли мешающая фигура на линии передвижения
-     */
-    public boolean isChessPieceOnMove(ChessBoard chessBoard, int toLine, int toColumn) {
-        if (chessBoard.board[toLine][toColumn] != null) {
-            return true;
-        }
-
-        if (currentLine != toLine) {
-            int[] lines = {currentLine, toLine};
-            int maxLine = Arrays.stream(lines).max().getAsInt();
-            int minLine = Arrays.stream(lines).min().getAsInt();
-            for (int i = minLine; i <= maxLine; i++) {
-                if (i == currentLine || i == currentLine) {
-                    continue;
-                }
-
-                if (chessBoard.board[i][currentColumn] != null) {
-                    return true;
-                }
-            }
-        }
-
-        if (currentColumn != toColumn) {
-            int[] columns = {currentColumn, toColumn};
-            int maxColumn = Arrays.stream(columns).max().getAsInt();
-            int minColumn = Arrays.stream(columns).min().getAsInt();
-            for (int i = minColumn; i <= maxColumn; i++) {
-                if (i == currentColumn || i == currentColumn) {
-                    continue;
-                }
-
-                if (chessBoard.board[i][currentColumn] != null) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     public String getSymbolWithColor() {
@@ -113,169 +62,67 @@ abstract public class ChessPiece {
     }
 
     /**
-     * Может ли фигура передвинуться по вертикали
+     * Проверить возможно ли перемещение к указанной клетке
      */
-    protected boolean canMoveVertical(ChessBoard chessBoard, int toLine) throws CannotMoveException {
-        int[] fromToLines = {currentLine, toLine};
-        int min = Arrays.stream(fromToLines).min().getAsInt();
-        int max = Arrays.stream(fromToLines).max().getAsInt();
-
-        for (int i = min; i <= max; i++) {
-            if (i == currentLine) {
-                continue;
-            }
-
-            if (chessBoard.board[i][currentColumn] != null) {
-                throw new CannotMoveException(this, toLine, currentColumn, MESSAGE_PIECE_BLOCK_MOVE + " " + chessBoard.board[i][currentColumn].getSymbolWithColor());
-            }
+    public void checkMove(ChessBoard board, MoveEntity moveEntity) throws CannotMoveException {
+        int[][] possibleMoves = getPossibleMoves(moveEntity);
+        Optional<ChessPiece> closestChessPiece = getClosestChessPiece(board, possibleMoves);
+        if (closestChessPiece.isPresent()){
+            throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_PIECE_BLOCK_MOVE + " - " + closestChessPiece.get().getSymbolWithColor());
         }
-
-        return true;
     }
 
     /**
-     * Может ли фигура передвинуться по горизонтали
+     * Проверить возможно ли атаковать фигуру
      */
-    protected boolean canMoveHorizontal(ChessBoard chessBoard, int toColumn) throws CannotMoveException {
-        int[] fromToLines = {currentColumn, toColumn};
-        int min = Arrays.stream(fromToLines).min().getAsInt();
-        int max = Arrays.stream(fromToLines).max().getAsInt();
-
-        for (int i = min; i <= max; i++) {
-            if (i == currentColumn) {
-                continue;
-            }
-
-            if (chessBoard.board[currentLine][i] != null) {
-                throw new CannotMoveException(this, currentLine, toColumn, MESSAGE_PIECE_BLOCK_MOVE + " " + chessBoard.board[i][currentColumn].getSymbolWithColor());
-            }
+    public void checkAttack(ChessBoard board, MoveEntity moveEntity) throws CannotMoveException {
+        int[][] possibleMoves = getPossibleMoves(moveEntity);
+        Optional<ChessPiece> closestChessPiece = getClosestChessPiece(board, possibleMoves);
+        if (closestChessPiece.isEmpty()){
+            throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_NOT_PIECE_TO_ATTACK);
         }
-
-        return true;
     }
 
     /**
-     * Проверка траектории движения фигуры. Может ли фигура двигаться по указанной траектории
+     * Получить все возможные клетки для движения фигуры
      */
-    protected boolean checkPossibleMoves(ChessBoard board, int toLine, int toColumn) throws CannotMoveException {
-        boolean canMove = false;
-        for (int[] moves : getPossibleMoves()) {
-            int possibleToLine = currentLine + moves[0];
-            int possibleToColumn = currentColumn + moves[1];
+    public int[][] getPossibleMoves(MoveEntity moveEntity) throws CannotMoveException {
 
-            if (possibleToLine < 0 || possibleToColumn < 0 || possibleToLine >= ChessBoard.LINES || possibleToColumn >= ChessBoard.COLUMNS) {
-                continue;
-            }
-
-            if (board.board[possibleToLine][possibleToColumn] != null) {
-                continue;
-            }
-
-            if (possibleToLine == toLine && possibleToColumn == toColumn) {
-                if (board.board[toLine][toColumn] != null) {
-                    throw new CannotMoveException(this, toLine, toColumn, MESSAGE_PIECE_BLOCK_MOVE);
-                }
-                canMove = true;
-                break;
-            }
+        int[][] possibleMoves;
+        switch (moveEntity.vectorEnum) {
+            case UP -> possibleMoves = getAllVerticalUpMoves(moveEntity.coordinatesEntity.toLine - currentLine);
+            case DOWN -> possibleMoves = getAllVerticalDownMoves(currentLine - moveEntity.coordinatesEntity.toLine);
+            case LEFT -> possibleMoves = getAllHorizontalLeftMoves(moveEntity.coordinatesEntity.toColumn - currentColumn);
+            case RIGHT -> possibleMoves = getAllHorizontalRightMoves(currentColumn - moveEntity.coordinatesEntity.toColumn);
+            case NE -> possibleMoves = getAllDiagonalNEMoves(moveEntity.coordinatesEntity.toColumn - currentColumn);
+            case NW -> possibleMoves = getAllDiagonalNWMoves(currentColumn - moveEntity.coordinatesEntity.toColumn);
+            case SW -> possibleMoves = getAllDiagonalSWMoves(moveEntity.coordinatesEntity.toColumn - currentColumn);
+            case SE -> possibleMoves = getAllDiagonalSEMoves(currentColumn - moveEntity.coordinatesEntity.toColumn);
+            default -> throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_UNDEFINE_MOVE);
         }
-        return canMove;
+
+        if (possibleMoves.length == 0) {
+            throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_NOT_POSSIBLE_MOVE);
+        }
+
+        return possibleMoves;
     }
 
     /**
-     * Может ли фигура передвинуться по диагонали
-     *
+     * Проверить есть ли фигура на траектории движения
      */
-    protected boolean canMoveDiagonal(ChessBoard chessBoard, int fromLine, int toLine, int fromColumn, int toColumn) {
-        return true;
-    }
+    public Optional<ChessPiece> getClosestChessPiece(ChessBoard board, int[][] possibleMoves)
+    {
+        for (int[] moves : possibleMoves) {
+            int line = moves[0];
+            int column = moves[1];
 
-    abstract public boolean canMoveToPosition(ChessBoard chessBoard, int toLine, int toColumn) throws CannotMoveException;
-
-    abstract public String getSymbol();
-
-    abstract protected int[][] getPossibleMoves();
-
-    /**
-     * Получить все ходы по вертикали (если limit <= 0)
-     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) сверху и снизу с указанным лимитом
-     * @deprecated
-     */
-    public int[][] getAllVerticalMoves(int limit) {
-        int limitDown = currentColumn - limit;
-        int limitUp = currentColumn + limit;
-        List<int[]> moves = new ArrayList<>();
-
-        if (limitDown < 0) {
-            limitDown = 0;
-        }
-
-        if (limitUp >= ChessBoard.COLUMNS - 1) {
-            limitUp = ChessBoard.COLUMNS - 1;
-        }
-
-        if (limit <= 0) {
-            limitDown = 0;
-            limitUp = ChessBoard.COLUMNS - 1;
-        }
-
-        // берем все ходы снизу
-        for (int i = currentColumn; i >= limitDown; i--) {
-            if (i == currentColumn) {
-                continue;
+            if (board.getChessPiece(line, column).isPresent()) {
+                return board.getChessPiece(line, column);
             }
-            moves.add(new int[]{currentLine, i});
         }
 
-        // берем все ходы сверху
-        for (int i = currentColumn; i <= limitUp; i++) {
-            if (i == currentColumn) {
-                continue;
-            }
-            moves.add(new int[]{currentLine, i});
-        }
-
-        return moves.toArray(new int[moves.size()][]);
-    }
-
-    /**
-     * Получить все ходы по горизонтали (если limit <= 0)
-     * Если limit > 0 - получим все ходы (не выходящие за пределы доски) слева и справа с указанным лимитом
-     * @deprecated
-     */
-    public int[][] getAllHorizontalMoves(int limit) {
-        int limitLeft = currentLine - limit;
-        int limitRight = currentLine + limit;
-        List<int[]> moves = new ArrayList<>();
-
-        if (limitLeft < 0) {
-            limitLeft = 0;
-        }
-
-        if (limitRight >= ChessBoard.LINES - 1) {
-            limitRight = ChessBoard.LINES - 1;
-        }
-
-        if (limit <= 0) {
-            limitLeft = 0;
-            limitRight = ChessBoard.LINES - 1;
-        }
-
-        for (int i = currentLine; i >= limitLeft; i--) {
-            if (i == currentLine) {
-                continue;
-            }
-            moves.add(new int[]{i, currentColumn});
-        }
-
-        for (int i = currentLine; i <= limitRight; i++) {
-            if (i == currentLine) {
-                continue;
-            }
-            moves.add(new int[]{i, currentColumn});
-        }
-
-        return moves.toArray(new int[moves.size()][]);
+        return Optional.empty();
     }
 
     /**
@@ -356,7 +203,6 @@ abstract public class ChessPiece {
         return moves.toArray(new int[moves.size()][]);
     }
 
-
     /**
      * Получить все ходы по вертикали сверху (если limit <= 0)
      * Если limit > 0 - получим все ходы (не выходящие за пределы доски) сверху с указанным лимитом
@@ -398,7 +244,7 @@ abstract public class ChessPiece {
             int newLine = currentLine + i;
             int newColumn = currentColumn + i;
 
-            if (newLine >= ChessBoard.LINES || newColumn >= ChessBoard.COLUMNS){
+            if (newLine >= ChessBoard.LINES || newColumn >= ChessBoard.COLUMNS) {
                 break;
             }
 
@@ -422,7 +268,7 @@ abstract public class ChessPiece {
             int newLine = currentLine - i;
             int newColumn = currentColumn - i;
 
-            if (newLine < 0 || newColumn< 0){
+            if (newLine < 0 || newColumn < 0) {
                 break;
             }
 
@@ -449,7 +295,7 @@ abstract public class ChessPiece {
             }
 
             int column = (currentColumn - i) + currentLine;
-            if (column < 0){
+            if (column < 0) {
                 continue;
             }
 
@@ -477,7 +323,7 @@ abstract public class ChessPiece {
 
             int column = (currentColumn - i) + currentLine;
 
-            if (i < 0 || column >= ChessBoard.COLUMNS){
+            if (i < 0 || column >= ChessBoard.COLUMNS) {
                 continue;
             }
             moves.add(new int[]{i, column});

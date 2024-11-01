@@ -1,7 +1,15 @@
 package app;
 
 import app.ChessPieces.*;
-import app.Exception.CannotMoveException;
+import app.Entity.CoordinatesEntity;
+import app.Entity.MoveEntity;
+import app.Entity.UserInputEntity;
+import app.Exception.BoardException;
+
+import java.util.Arrays;
+import java.util.Optional;
+
+import static app.Exception.BoardException.*;
 
 public class ChessBoard {
     public static final int LINES = 8;
@@ -19,21 +27,22 @@ public class ChessBoard {
         return this.nowPlayer;
     }
 
-    public boolean moveToPosition(int startLine, int startColumn, int endLine, int endColumn) throws CannotMoveException {
-        if (!checkPosition(startLine) || !checkPosition(startColumn)){
-            return false;
+    public boolean moveToPosition(UserInputEntity userInputEntity) throws Exception {
+        CoordinatesEntity xy = userInputEntity.moveEntity.coordinatesEntity;
+        Optional<ChessPiece> chessPiece = getChessPiece(xy.currentLine, xy.currentColumn);
+        if (chessPiece.isEmpty()){
+            throw new BoardException(xy, MESSAGE_CHESS_PIECE_NOT_FOUND);
         }
 
-        if (!nowPlayer.equals(board[startLine][startColumn].getColor())) {
-            return false;
+        if (!nowPlayer.equals(chessPiece.get().getColor())) {
+           throw new BoardException(xy, MESSAGE_IS_NOT_YOUR_PIECE);
         }
 
-        if (board[startLine][startColumn].canMoveToPosition(this, endLine, endColumn)) {
-            ChessPiece chessPiece = board[startLine][startColumn];
-            chessPiece.currentLine = endLine;
-            chessPiece.currentColumn = endColumn;
-            board[endLine][endColumn] = board[startLine][startColumn]; // if piece can move, we moved a piece
-            board[startLine][startColumn] = null; // set null to previous cell
+        if (chessPiece.get().canMoveToPosition(this, userInputEntity.moveEntity)) {
+            chessPiece.get().currentLine = xy.toLine;
+            chessPiece.get().currentColumn = xy.toColumn;
+            setChessPiece(chessPiece, xy.toLine ,xy.toColumn); // if piece can move, we moved a piece
+            setChessPiece(Optional.empty(), xy.currentLine, xy.currentColumn);  // set null to previous cell
             return true;
         }
 
@@ -75,9 +84,37 @@ public class ChessBoard {
         return true;
     }
 
-    public void changePlayer(){
+    public void changePlayer() {
         this.nowPlayer = this.nowPlayerColor().equals(ChessPiece.COLOR_WHITE) ? ChessPiece.COLOR_BLACK : ChessPiece.COLOR_WHITE;
         System.out.print("Ход игрока " + nowPlayer + ":: ");
+    }
+
+    public Optional<ChessPiece> getChessPiece(int line, int column) {
+        if (board[line][column] == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(board[line][column]);
+    }
+
+    public void setChessPiece(Optional<ChessPiece> chessPiece, int line, int column) {
+        if (chessPiece.isEmpty()) {
+            board[line][column] = null;
+            return;
+        }
+        board[line][column] = chessPiece.get();
+    }
+
+    public CoordinatesEntity mapCoordinatesFromString(String from, String to){
+        char[] currentLocation = from.toCharArray();
+        int currentColumn = Arrays.asList(ChessBoard.columnsName).indexOf(String.valueOf(currentLocation[0]));
+        int currentLine = Integer.parseInt(String.valueOf(currentLocation[1]));
+
+        char[] toLocation = to.toCharArray();
+        int toColumn = Arrays.asList(ChessBoard.columnsName).indexOf(String.valueOf(toLocation[0]));
+        int toLine = Integer.parseInt(String.valueOf(toLocation[1]));
+
+        return new CoordinatesEntity(currentLine, currentColumn, toLine, toColumn);
     }
 
     protected void showColumnsName() {

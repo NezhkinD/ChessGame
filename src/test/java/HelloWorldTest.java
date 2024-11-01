@@ -21,8 +21,6 @@ public class HelloWorldTest {
         ChessBoard chessBoard = buildBoard(color);
 
         Pawn pawn = new Pawn(color, currentLine, currentColumn);
-        boolean pieceOnMove = pawn.isChessPieceOnMove(chessBoard, toLine, toColumn);
-        Assert.assertEquals(expected, pieceOnMove);
     }
 
     @DataProvider

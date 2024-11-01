@@ -1,0 +1,135 @@
+[
+  {
+    "id": 1,
+    "current": "e1",
+    "to": "e2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 2,
+    "current": "e1",
+    "to": "f1",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 3,
+    "current": "e1",
+    "to": "d1",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 4,
+    "current": "e1",
+    "to": "f2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 5,
+    "current": "e1",
+    "to": "d2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 6,
+    "current": "e1",
+    "to": "e3",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 7,
+    "current": "h8",
+    "to": "h7",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 8,
+    "current": "h7",
+    "to": "g7",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 9,
+    "current": "h8",
+    "to": "g7",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 10,
+    "current": "h8",
+    "to": "h6",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 11,
+    "current": "d4",
+    "to": "d5",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 12,
+    "current": "d4",
+    "to": "d3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 13,
+    "current": "d4",
+    "to": "c4",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 14,
+    "current": "d4",
+    "to": "e4",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 15,
+    "current": "d4",
+    "to": "e5",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 16,
+    "current": "d4",
+    "to": "c5",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 17,
+    "current": "d4",
+    "to": "c3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 18,
+    "current": "d4",
+    "to": "e3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 19,
+    "current": "e4",
+    "to": "e6",
+    "canMove": false,
+    "color": "white"
+  }
+]

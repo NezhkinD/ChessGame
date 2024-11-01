@@ -3,8 +3,8 @@ package app.Exception;
 import app.ChessPieces.ChessPiece;
 import app.Entity.CoordinatesEntity;
 
-public class CannotMoveException extends Exception {
-    final public static String MESSAGE_BOARD_LIMIT = "Перемещение в клетку назначение, приведет к выходу за пределы доски";
+public class CannotAttackException extends Exception {
+    final public static String MESSAGE_NOT_PIECE_TO_ATTACK = "Нет фигуры для атаки";
     final public static String MESSAGE_PIECE_BLOCK_MOVE = "Перемещению мешает другая фигура";
     final public static String MESSAGE_NOT_POSSIBLE_MOVE = "Указана неверная траектория движения для фигуры";
     final public static String MESSAGE_UNDEFINE_MOVE = "Не определена траектория движения фигуры";
@@ -12,11 +12,11 @@ public class CannotMoveException extends Exception {
     final public static String MESSAGE_NOT_POSSIBLE_MOVE_KING = "Король может перемещаться только на одну клетку";
     final public static String MESSAGE_CURRENT_LOCATION_EQ_TO_LOCATION = "Указанные координаты перемещения, соответствуют текущему положению фигуры";
 
-    public CannotMoveException(ChessPiece chessPiece, int toLine, int toColumn, String message) {
+    public CannotAttackException(ChessPiece chessPiece, int toLine, int toColumn, String message) {
         super("Текущая фигура " + chessPiece.getSymbolWithColor() + ": перемещение из клетки " + chessPiece.currentLine + "-" + chessPiece.currentColumn + " в клетку " + toLine + "-" + toColumn + " невозможно: " + message);
     }
 
-    public CannotMoveException(CoordinatesEntity xy, String message) {
+    public CannotAttackException(CoordinatesEntity xy, String message) {
         super("Перемещение из " + xy.userViewCurrent + " в " + xy.userViewTo + " невозможно: " + message);
     }
 }

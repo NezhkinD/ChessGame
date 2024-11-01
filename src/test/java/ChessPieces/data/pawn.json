@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "current": "a1",
+    "to": "a2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 2,
+    "current": "a1",
+    "to": "a3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 3,
+    "current": "a1",
+    "to": "a4",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 4,
+    "current": "a6",
+    "to": "a5",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 5,
+    "current": "a6",
+    "to": "a4",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 6,
+    "current": "a6",
+    "to": "a3",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 7,
+    "current": "b1",
+    "to": "b2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 8,
+    "current": "b1",
+    "to": "b3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 9,
+    "current": "b1",
+    "to": "b4",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 10,
+    "current": "b6",
+    "to": "b5",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 11,
+    "current": "b6",
+    "to": "b4",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 12,
+    "current": "b6",
+    "to": "b3",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 13,
+    "current": "e1",
+    "to": "e2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 14,
+    "current": "e6",
+    "to": "e5",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 15,
+    "current": "e6",
+    "to": "e4",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 16,
+    "current": "g1",
+    "to": "h2",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 17,
+    "current": "h6",
+    "to": "h5",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 18,
+    "current": "h6",
+    "to": "h4",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 19,
+    "current": "h5",
+    "to": "h3",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 20,
+    "current": "e4",
+    "to": "e6",
+    "canMove": false,
+    "color": "white"
+  }
+]

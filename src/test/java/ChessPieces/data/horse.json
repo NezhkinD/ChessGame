@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "current": "d4",
+    "to": "c6",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 2,
+    "current": "d4",
+    "to": "e6",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 3,
+    "current": "d4",
+    "to": "f5",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 4,
+    "current": "d4",
+    "to": "f3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 5,
+    "current": "d4",
+    "to": "e2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 6,
+    "current": "d4",
+    "to": "c2",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 7,
+    "current": "d4",
+    "to": "b3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 8,
+    "current": "d4",
+    "to": "b5",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 9,
+    "current": "d4",
+    "to": "d5",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 10,
+    "current": "d4",
+    "to": "d6",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 11,
+    "current": "d4",
+    "to": "a1",
+    "canMove": false,
+    "color": "white"
+  },
+  {
+    "id": 12,
+    "current": "h7",
+    "to": "f6",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 13,
+    "current": "h7",
+    "to": "g5",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 14,
+    "current": "h7",
+    "to": "f8",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 15,
+    "current": "h7",
+    "to": "i5",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 16,
+    "current": "a0",
+    "to": "b2",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 17,
+    "current": "a0",
+    "to": "c1",
+    "canMove": true,
+    "color": "black"
+  },
+  {
+    "id": 18,
+    "current": "a0",
+    "to": "c2",
+    "canMove": false,
+    "color": "black"
+  },
+  {
+    "id": 19,
+    "current": "b1",
+    "to": "a3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 20,
+    "current": "b1",
+    "to": "c3",
+    "canMove": true,
+    "color": "white"
+  },
+  {
+    "id": 21,
+    "current": "b1",
+    "to": "d2",
+    "canMove": false,
+    "color": "white"
+  }
+]

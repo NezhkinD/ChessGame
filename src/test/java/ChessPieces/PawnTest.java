@@ -1,5 +1,9 @@
 package ChessPieces;
 
+import app.Entity.CoordinatesEntity;
+import app.Entity.MoveEntity;
+import app.Enum.VectorEnum;
+import app.Exception.CannotMoveException;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,6 +18,11 @@ import org.junit.runner.RunWith;
 
 import java.util.Optional;
 
+import static app.Exception.CannotMoveException.*;
+
+/**
+ * @deprecated
+ */
 @RunWith(DataProviderRunner.class)
 public class PawnTest extends BaseChessPiecesTest {
 
@@ -26,12 +35,23 @@ public class PawnTest extends BaseChessPiecesTest {
             int toLine,
             int toColumn,
             ChessBoard board,
-            boolean expectedIsPieceOnMove
+            boolean expectedIsPieceOnMove,
+            String exceptionMessage
     ) {
-        Pawn pawn = new Pawn(color, currentLine, currentColumn);
-        boolean chessPieceOnMove = pawn.isChessPieceOnMove(board, toLine, toColumn);
-        Assert.assertEquals(expectedIsPieceOnMove, chessPieceOnMove);
-        board.printBoard();
+
+        try {
+            Pawn pawn = new Pawn(color, currentLine, currentColumn);
+            CoordinatesEntity coordinatesEntity = new CoordinatesEntity(currentLine, currentColumn, toLine, toColumn);
+            MoveEntity moveEntity = new MoveEntity(coordinatesEntity);
+            boolean canMoveToPosition = pawn.canMoveToPosition(board, moveEntity);
+            Assert.assertEquals(expectedIsPieceOnMove, canMoveToPosition);
+
+            // todo debug
+            board.printBoard();
+
+        } catch (CannotMoveException e) {
+            Assert.assertTrue(e.getMessage().contains(exceptionMessage));
+        }
     }
 
     @DataProvider
@@ -41,10 +61,41 @@ public class PawnTest extends BaseChessPiecesTest {
                         ChessPiece.COLOR_WHITE,
                         2, // currentLine
                         0, // currentColumn
-                        5, // toLine
+                        2, // toLine
                         0,  // toColumn
                         createBoard(), //board
-                        true // pieceOnMove
+                        false, // pieceOnMove
+                        MESSAGE_CURRENT_LOCATION_EQ_TO_LOCATION // exceptionMessage
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        2, // currentLine
+                        0, // currentColumn
+                        3, // toLine
+                        0,  // toColumn
+                        createBoard(), //board
+                        true, // pieceOnMove
+                        "NULL", // exceptionMessage
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        1, // currentLine
+                        0, // currentColumn
+                        2, // toLine
+                        2,  // toColumn
+                        createBoard(), //board
+                        false, // pieceOnMove
+                        MESSAGE_NOT_POSSIBLE_MOVE, // exceptionMessage
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        1, // currentLine
+                        0, // currentColumn
+                        4, // toLine
+                        0,  // toColumn
+                        createBoard(), //board
+                        false, // pieceOnMove
+                        MESSAGE_NOT_POSSIBLE_MOVE, // exceptionMessage
                 },
                 {
                         ChessPiece.COLOR_WHITE,
@@ -53,7 +104,8 @@ public class PawnTest extends BaseChessPiecesTest {
                         4, // toLine
                         0,  // toColumn
                         createBoard(), //board
-                        true // pieceOnMove
+                        false, // pieceOnMove
+                        MESSAGE_NOT_POSSIBLE_MOVE_PAWN, // exceptionMessage
                 },
                 {
                         ChessPiece.COLOR_WHITE,
@@ -62,53 +114,9 @@ public class PawnTest extends BaseChessPiecesTest {
                         3, // toLine
                         0,  // toColumn
                         createBoard(), //board
-                        false // pieceOnMove
+                        true, // pieceOnMove
+                        "NULL", // exceptionMessage
                 },
-                {
-                        ChessPiece.COLOR_WHITE,
-                        2, // currentLine
-                        0, // currentColumn
-                        3, // toLine
-                        0,  // toColumn
-                        createBoard(), //board
-                        false // pieceOnMove
-                },
-                {
-                        ChessPiece.COLOR_BLACK,
-                        4, // currentLine
-                        0, // currentColumn
-                        3, // toLine
-                        0,  // toColumn
-                        createBoard(), //board
-                        false // pieceOnMove
-                },
-                {
-                        ChessPiece.COLOR_BLACK,
-                        4, // currentLine
-                        0, // currentColumn
-                        2, // toLine
-                        0,  // toColumn
-                        createBoard(), //board
-                        true // pieceOnMove
-                },
-                {
-                        ChessPiece.COLOR_BLACK,
-                        4, // currentLine
-                        0, // currentColumn
-                        1, // toLine
-                        0,  // toColumn
-                        createBoard(), //board
-                        true // pieceOnMove
-                },
-                {
-                        ChessPiece.COLOR_BLACK,
-                        4, // currentLine
-                        0, // currentColumn
-                        5, // toLine
-                        0,  // toColumn
-                        createBoard(), //board
-                        false // pieceOnMove
-                }
         };
     }
 

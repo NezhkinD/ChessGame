@@ -2,6 +2,7 @@ package ChessPieces;
 
 import app.ChessPieces.ChessPiece;
 import app.ChessPieces.Queen;
+import app.Enum.VectorEnum;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -9,6 +10,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * @deprecated
+ */
 @RunWith(DataProviderRunner.class)
 public class QueenTest {
 
@@ -284,6 +288,105 @@ public class QueenTest {
                         new int[][]{{5, 3}, {6, 2}, {7, 1}}, // NW
                         new int[][]{{3, 5}, {2, 6}, {1, 7}}, // SE
                         new int[][]{{5, 5}, {6, 6}, {7, 7}}, // NE
+                }
+        };
+    }
+
+    @Test
+    @UseDataProvider("loadDataForGetVectorMoveByToLineToColumn")
+    public void getVectorMoveByToLineToColumnTest(
+            String color,
+            int currentLine,
+            int currentColumn,
+            int toLine,
+            int toColumn,
+            VectorEnum expected
+    ){
+
+    }
+
+    @DataProvider
+    public static Object[][] loadDataForGetVectorMoveByToLineToColumn(){
+        return new Object[][]{
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        3,
+                        5,
+                        VectorEnum.SE,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        3,
+                        3,
+                        VectorEnum.SW,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        5,
+                        5,
+                        VectorEnum.NE,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        5,
+                        3,
+                        VectorEnum.NW,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        3,
+                        4,
+                        VectorEnum.DOWN,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        5,
+                        4,
+                        VectorEnum.UP,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        4,
+                        5,
+                        VectorEnum.RIGHT,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        4,
+                        4,
+                        4,
+                        3,
+                        VectorEnum.LEFT,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        1,
+                        1,
+                        1,
+                        1,
+                        VectorEnum.NONE,
+                },
+                {
+                        ChessPiece.COLOR_WHITE,
+                        1,
+                        1,
+                        2,
+                        2,
+                        VectorEnum.NE,
                 }
         };
     }

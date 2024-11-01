@@ -6,6 +6,10 @@ import app.ChessPieces.*;
 import java.util.Optional;
 
 abstract public class BaseChessPiecesTest {
+    protected static ChessBoard createEmptyBoard(Optional<String> nowPlayerColor){
+        return new ChessBoard(nowPlayerColor.orElse(ChessPiece.COLOR_WHITE));
+    }
+
     protected static ChessBoard createBaseBoard(Optional<String> nowPlayerColor) {
 
         ChessBoard board = new ChessBoard(nowPlayerColor.orElse(ChessPiece.COLOR_WHITE));

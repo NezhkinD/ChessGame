@@ -4,6 +4,7 @@ import ChessPieces.data.TestCase;
 import app.ChessBoard;
 import app.ChessPieces.ChessPiece;
 import app.ChessPieces.Horse;
+import app.ChessPieces.King;
 import app.ChessPieces.Pawn;
 import app.Entity.CoordinatesEntity;
 import app.Entity.MoveEntity;
@@ -28,7 +29,7 @@ import static app.Exception.CannotMoveException.MESSAGE_NOT_POSSIBLE_MOVE;
  * @deprecated
  */
 @RunWith(DataProviderRunner.class)
-public class HorseTest extends BaseChessPiecesTest {
+public class KingTest extends BaseChessPiecesTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -37,7 +38,7 @@ public class HorseTest extends BaseChessPiecesTest {
         String userDirectoryPath = System.getProperty("user.dir");
         File file = new File(userDirectoryPath + "/src/test/java/ChessPieces/data/pawn.json");
         List<TestCase> pawnMoves = objectMapper.readValue(file, new TypeReference<>(){});
-        ChessBoard board = createBaseBoard(Optional.empty());
+        ChessBoard board = createEmptyBoard(Optional.empty());
 
 
         for (TestCase moves : pawnMoves) {
@@ -45,9 +46,9 @@ public class HorseTest extends BaseChessPiecesTest {
                 CoordinatesEntity xy = new CoordinatesEntity(moves.current, moves.to);
                 MoveEntity moveEntity = new MoveEntity(xy);
 
-                Pawn pawn = new Pawn(moves.color, xy.currentLine, xy.currentColumn);
+                King king = new King(moves.color, xy.currentLine, xy.currentColumn);
 
-                Assert.assertTrue(pawn.canMoveToPosition(board, moveEntity));
+                Assert.assertTrue(king.canMoveToPosition(board, moveEntity));
             } catch (Throwable t){
                 Assert.assertFalse("ID:" + moves.id + " " + t.getMessage(), moves.canMove);
             }
