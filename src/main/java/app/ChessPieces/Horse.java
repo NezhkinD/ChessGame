@@ -10,6 +10,8 @@ import static app.Exception.CannotMoveException.MESSAGE_NOT_POSSIBLE_MOVE;
 import static app.Exception.CannotMoveException.MESSAGE_PIECE_BLOCK_MOVE;
 
 public class Horse extends ChessPiece {
+    public static String SYMBOL = "H";
+
     public Horse(String color, int currentLine, int currentColumn) {
         super(color, currentLine, currentColumn);
     }
@@ -28,12 +30,12 @@ public class Horse extends ChessPiece {
     }
 
     @Override
-    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException {
-        return false;
+    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException, CannotMoveException {
+        // todo изменить логику атаки, достаточно проверять существует ли фигура для атаки
+        checkAttack(chessBoard, moveEntity);
+        return true;
     }
 
     @Override
-    public String getSymbol() {
-        return "H";
-    }
+    public String getSymbol() {return SYMBOL;}
 }

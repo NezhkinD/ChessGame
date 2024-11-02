@@ -8,6 +8,10 @@ import static app.Exception.CannotMoveException.MESSAGE_BOARD_LIMIT;
 
 public class MoveEntity {
     public CoordinatesEntity coordinatesEntity;
+
+    /**
+     * кол-во клеток, на которые будет перемещена фигура в направлении vectorEnum
+     */
     public int limit;
     public VectorEnum vectorEnum;
 
@@ -30,8 +34,8 @@ public class MoveEntity {
         switch (vectorEnum) {
             case UP, NE, NW -> limit = xy.toLine - xy.currentLine;
             case DOWN -> limit = xy.currentLine - xy.toLine;
-            case LEFT, SE -> limit = xy.toColumn - xy.currentColumn;
-            case RIGHT, SW -> limit = xy.currentColumn - xy.toColumn;
+            case RIGHT, SE -> limit = xy.toColumn - xy.currentColumn;
+            case LEFT, SW -> limit = xy.currentColumn - xy.toColumn;
             case HORSE -> limit = 1;
             default -> limit = 0;
         }

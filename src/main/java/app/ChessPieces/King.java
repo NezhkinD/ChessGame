@@ -9,6 +9,8 @@ import app.Exception.CannotMoveException;
 import static app.Exception.CannotMoveException.*;
 
 public class King extends ChessPiece{
+    public static String SYMBOL = "K";
+
     public King(String color, int currentLine, int currentColumn) {
         super(color, currentLine, currentColumn);
     }
@@ -29,10 +31,11 @@ public class King extends ChessPiece{
     }
 
     @Override
-    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException {
-        return false;
+    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException, CannotMoveException {
+        checkAttack(chessBoard, moveEntity);
+        return true;
     }
 
     @Override
-    public String getSymbol() {return "K";}
+    public String getSymbol() {return SYMBOL;}
 }

@@ -7,9 +7,10 @@ import app.Exception.CannotAttackException;
 import app.Exception.CannotMoveException;
 
 import static app.Exception.CannotMoveException.MESSAGE_NOT_POSSIBLE_MOVE;
-import static app.Exception.CannotMoveException.MESSAGE_PIECE_BLOCK_MOVE;
 
 public class Rook extends ChessPiece{
+    public static String SYMBOL = "R";
+
     public Rook(String color, int currentLine, int currentColumn) {
         super(color, currentLine, currentColumn);
     }
@@ -26,12 +27,11 @@ public class Rook extends ChessPiece{
     }
 
     @Override
-    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException {
-        return false;
+    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotMoveException, CannotAttackException {
+        checkAttack(chessBoard, moveEntity);
+        return true;
     }
 
     @Override
-    public String getSymbol() {
-        return "R";
-    }
+    public String getSymbol() {return SYMBOL;}
 }

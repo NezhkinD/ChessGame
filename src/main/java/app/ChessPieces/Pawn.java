@@ -11,6 +11,8 @@ import java.util.Objects;
 import static app.Exception.CannotMoveException.*;
 
 public class Pawn extends ChessPiece {
+    public static String SYMBOL = "P";
+
     public Pawn(String color, int currentLine, int currentColumn) {
         super(color, currentLine, currentColumn);
     }
@@ -39,11 +41,11 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException {
-        return false;
+    public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException, CannotMoveException {
+        checkAttack(chessBoard, moveEntity);
+        return true;
     }
 
-
     @Override
-    public String getSymbol() {return "P";}
+    public String getSymbol() {return SYMBOL;}
 }

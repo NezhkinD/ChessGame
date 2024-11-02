@@ -3,8 +3,8 @@ package app;
 import app.ChessPieces.*;
 import app.Entity.UserInputEntity;
 import app.Exception.BoardException;
+import app.Exception.CannotAttackException;
 import app.Exception.CannotMoveException;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.Random;
@@ -20,7 +20,8 @@ public class Main {
     public static final String COMMAND_REPLAY = "replay";
     public static final String COMMAND_CASTLING0 = "castling0";
     public static final String COMMAND_CASTLING7 = "castling7";
-    private static final String MESSAGE_OUTPUT_EXIT = "Завершаем работу.\n-----------------";
+    private static final String MESSAGE_OUTPUT_EXIT = "Завершаем игру.\n-----------------";
+    final public static String MESSAGE_KING_IS_NOT_EXIST = "Вражеский король убит, победа игрока";
 
     public static void main(String[] args) {
         ChessBoard board = buildBoard();
@@ -33,8 +34,7 @@ public class Main {
             String scannerInput = scanner.nextLine();
 
             if (scannerInput.equals(COMMAND_EXIT)) {
-                System.out.println(MESSAGE_OUTPUT_EXIT);
-                System.exit(0);
+                exit("\n");
             }
 
             if (scannerInput.equals(COMMAND_REPLAY)) {
@@ -43,7 +43,6 @@ public class Main {
                 board.printBoard();
                 continue;
             }
-
 
             if (scannerInput.equals(COMMAND_CASTLING0)) {
                 if (board.castling0()) {
@@ -72,15 +71,31 @@ public class Main {
 
             try {
                 UserInputEntity userInputEntity = new UserInputEntity(scannerInput);
-                if (board.moveToPosition(userInputEntity)) {
-                    board.printBoard();
-                    System.out.println("Игрок " + board.nowPlayer + " сделал ход");
-                    board.changePlayer();
-                    continue;
+                if (scannerInput.contains(COMMAND_MOVE)) {
+                    if (board.moveToPosition(userInputEntity)) {
+                        board.printBoard();
+                        System.out.println("Игрок " + board.nowPlayer + " сделал ход");
+                        board.changePlayer();
+                        continue;
+                    }
                 }
-                logger.warn("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
 
-            } catch (CannotMoveException | BoardException e) {
+                if (scannerInput.contains(COMMAND_ATTACK)) {
+                    if (board.attackPiece(userInputEntity)) {
+                        board.printBoard();
+                        System.out.println("Игрок " + board.nowPlayer + " атаковал");
+
+                        if (!board.checkOppositeKingExist()){
+                            exit(MESSAGE_KING_IS_NOT_EXIST + " " + board.nowPlayer);
+                        }
+
+                        board.changePlayer();
+                        continue;
+                    }
+                }
+
+                logger.warn("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
+            } catch (CannotMoveException | CannotAttackException | BoardException e) {
                 logger.warn(e.getMessage());
                 logger.warn("Игроку " + board.nowPlayer + " не удалось сделать ход. Игрок " + board.nowPlayer + " повторите ход.");
                 System.out.print("Ход игрока " + board.nowPlayer + ":: ");
@@ -111,8 +126,8 @@ public class Main {
 //        board.board[0][0] = new Rook(ChessPiece.COLOR_WHITE, 0, 0);
 //        board.board[0][1] = new Horse(ChessPiece.COLOR_WHITE, 0, 1);
 //        board.board[0][2] = new Bishop(ChessPiece.COLOR_WHITE, 0, 2);
-        board.board[0][3] = new Queen(ChessPiece.COLOR_WHITE, 0, 3);
-//        board.board[0][4] = new King(ChessPiece.COLOR_WHITE, 0, 4);
+        board.board[6][3] = new Queen(ChessPiece.COLOR_WHITE, 6, 3);
+        board.board[0][4] = new King(ChessPiece.COLOR_WHITE, 0, 4);
 //        board.board[0][5] = new Bishop(ChessPiece.COLOR_WHITE, 0, 5);
 //        board.board[0][6] = new Horse(ChessPiece.COLOR_WHITE, 0, 6);
 //        board.board[0][7] = new Rook(ChessPiece.COLOR_WHITE, 0, 7);
@@ -136,7 +151,7 @@ public class Main {
         board.board[6][0] = new Pawn(ChessPiece.COLOR_BLACK, 6, 0);
         board.board[6][1] = new Pawn(ChessPiece.COLOR_BLACK, 6, 1);
         board.board[6][2] = new Pawn(ChessPiece.COLOR_BLACK, 6, 2);
-        board.board[6][3] = new Pawn(ChessPiece.COLOR_BLACK, 6, 3);
+        // board.board[6][3] = new Pawn(ChessPiece.COLOR_BLACK, 6, 3);
         board.board[6][4] = new Pawn(ChessPiece.COLOR_BLACK, 6, 4);
         board.board[6][5] = new Pawn(ChessPiece.COLOR_BLACK, 6, 5);
         board.board[6][6] = new Pawn(ChessPiece.COLOR_BLACK, 6, 6);
@@ -150,5 +165,11 @@ public class Main {
             color = ChessPiece.COLOR_BLACK;
         }
         return color;
+    }
+
+    protected static void exit(String message) {
+        System.out.println(message);
+        System.out.println(MESSAGE_OUTPUT_EXIT);
+        System.exit(0);
     }
 }

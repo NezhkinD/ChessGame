@@ -17,6 +17,9 @@ public class CoordinatesEntity {
         this.currentColumn = currentColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
+
+        this.userViewCurrent = ""; //todo
+        this.userViewTo = ""; //todo
     }
 
     public CoordinatesEntity(String from, String to) {

@@ -1,13 +1,14 @@
 package app.ChessPieces;
 
 import app.ChessBoard;
+import app.Entity.CoordinatesEntity;
 import app.Entity.MoveEntity;
 import app.Exception.CannotAttackException;
 import app.Exception.CannotMoveException;
 
 import java.util.*;
 
-import static app.Exception.CannotAttackException.MESSAGE_NOT_PIECE_TO_ATTACK;
+import static app.Exception.CannotAttackException.*;
 import static app.Exception.CannotMoveException.*;
 
 abstract public class ChessPiece {
@@ -39,7 +40,7 @@ abstract public class ChessPiece {
 
     abstract public boolean canMoveToPosition(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotMoveException;
 
-    abstract public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException;
+    abstract public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException, CannotMoveException;
 
     abstract public String getSymbol();
 
@@ -65,60 +66,82 @@ abstract public class ChessPiece {
      * Проверить возможно ли перемещение к указанной клетке
      */
     public void checkMove(ChessBoard board, MoveEntity moveEntity) throws CannotMoveException {
-        int[][] possibleMoves = getPossibleMoves(moveEntity);
+        List<CoordinatesEntity> possibleMoves = getPossibleMoves(moveEntity);
+
+
         Optional<ChessPiece> closestChessPiece = getClosestChessPiece(board, possibleMoves);
-        if (closestChessPiece.isPresent()){
+        if (closestChessPiece.isPresent()) {
             throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_PIECE_BLOCK_MOVE + " - " + closestChessPiece.get().getSymbolWithColor());
         }
     }
 
     /**
      * Проверить возможно ли атаковать фигуру
+     * Для атаки, м/у фигурами не должно быть других фигур
      */
-    public void checkAttack(ChessBoard board, MoveEntity moveEntity) throws CannotMoveException {
-        int[][] possibleMoves = getPossibleMoves(moveEntity);
-        Optional<ChessPiece> closestChessPiece = getClosestChessPiece(board, possibleMoves);
-        if (closestChessPiece.isEmpty()){
-            throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_NOT_PIECE_TO_ATTACK);
+    public void checkAttack(ChessBoard board, MoveEntity moveEntity) throws CannotMoveException, CannotAttackException {
+        List<CoordinatesEntity> possibleMoves = getPossibleMoves(moveEntity);
+        int lastIndex = moveEntity.limit - 1;
+
+        if (lastIndex > 1) {
+            if (possibleMoves.get(lastIndex).toLine != moveEntity.coordinatesEntity.toLine || possibleMoves.get(lastIndex).toColumn != moveEntity.coordinatesEntity.toColumn) {
+                throw new CannotAttackException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_CANNOT_ATTACK);
+            }
+        }
+
+        if (board.getChessPiece(moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn).isEmpty()) {
+            throw new CannotAttackException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_NOT_PIECE_TO_ATTACK);
+        }
+
+//        if (lastIndex != 0) {
+//            throw new CannotAttackException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_CANNOT_ATTACK);
+//        }
+
+        if (moveEntity.limit > 1){
+            Optional<ChessPiece> closestChessPiece = getClosestChessPiece(board, possibleMoves);
+            if (closestChessPiece.isPresent() && (closestChessPiece.get().currentLine != moveEntity.coordinatesEntity.toLine || closestChessPiece.get().currentColumn != moveEntity.coordinatesEntity.toColumn)) {
+                throw new CannotAttackException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_PIECE_BLOCK_ATTACK + " " + closestChessPiece.get().getSymbolWithColor());
+            }
         }
     }
 
     /**
      * Получить все возможные клетки для движения фигуры
      */
-    public int[][] getPossibleMoves(MoveEntity moveEntity) throws CannotMoveException {
+    public List<CoordinatesEntity> getPossibleMoves(MoveEntity moveEntity) throws CannotMoveException {
 
-        int[][] possibleMoves;
+        List<CoordinatesEntity> xyList;
         switch (moveEntity.vectorEnum) {
-            case UP -> possibleMoves = getAllVerticalUpMoves(moveEntity.coordinatesEntity.toLine - currentLine);
-            case DOWN -> possibleMoves = getAllVerticalDownMoves(currentLine - moveEntity.coordinatesEntity.toLine);
-            case LEFT -> possibleMoves = getAllHorizontalLeftMoves(moveEntity.coordinatesEntity.toColumn - currentColumn);
-            case RIGHT -> possibleMoves = getAllHorizontalRightMoves(currentColumn - moveEntity.coordinatesEntity.toColumn);
-            case NE -> possibleMoves = getAllDiagonalNEMoves(moveEntity.coordinatesEntity.toColumn - currentColumn);
-            case NW -> possibleMoves = getAllDiagonalNWMoves(currentColumn - moveEntity.coordinatesEntity.toColumn);
-            case SW -> possibleMoves = getAllDiagonalSWMoves(moveEntity.coordinatesEntity.toColumn - currentColumn);
-            case SE -> possibleMoves = getAllDiagonalSEMoves(currentColumn - moveEntity.coordinatesEntity.toColumn);
-            default -> throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_UNDEFINE_MOVE);
+            case UP -> xyList = getAllVerticalUpMoves(moveEntity);
+            case DOWN -> xyList = getAllVerticalDownMoves(moveEntity);
+            case LEFT -> xyList = getAllHorizontalLeftMoves(moveEntity);
+            case RIGHT -> xyList = getAllHorizontalRightMoves(moveEntity);
+            case NE -> xyList = getAllDiagonalNEMoves(moveEntity);
+            case NW -> xyList = getAllDiagonalNWMoves(moveEntity);
+            case SW -> xyList = getAllDiagonalSWMoves(moveEntity);
+            case SE -> xyList = getAllDiagonalSEMoves(moveEntity);
+            default ->
+                    throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_UNDEFINE_MOVE);
         }
 
-        if (possibleMoves.length == 0) {
+        if (xyList.size() == 0) {
             throw new CannotMoveException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_NOT_POSSIBLE_MOVE);
         }
 
-        return possibleMoves;
+        return xyList;
     }
 
     /**
      * Проверить есть ли фигура на траектории движения
      */
-    public Optional<ChessPiece> getClosestChessPiece(ChessBoard board, int[][] possibleMoves)
-    {
-        for (int[] moves : possibleMoves) {
-            int line = moves[0];
-            int column = moves[1];
+    public Optional<ChessPiece> getClosestChessPiece(ChessBoard board, List<CoordinatesEntity> possibleMoves) {
+        for (CoordinatesEntity moves : possibleMoves) {
+            if (moves == null) {
+                break;
+            }
 
-            if (board.getChessPiece(line, column).isPresent()) {
-                return board.getChessPiece(line, column);
+            if (board.getChessPiece(moves.toLine, moves.toColumn).isPresent()) {
+                return board.getChessPiece(moves.toLine, moves.toColumn);
             }
         }
 
@@ -126,208 +149,210 @@ abstract public class ChessPiece {
     }
 
     /**
-     * Получить все ходы по горизонтали слева (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по горизонтали слева (если limit <= 0)
      * Если limit > 0 - получим все ходы (не выходящие за пределы доски) слева с указанным лимитом
      */
-    public int[][] getAllHorizontalLeftMoves(int limit) {
-        int limitLeft = currentColumn - limit;
-        List<int[]> moves = new ArrayList<>();
+    public List<CoordinatesEntity> getAllHorizontalLeftMoves(MoveEntity moveEntity) {
+        int limitLeft = moveEntity.coordinatesEntity.currentColumn - moveEntity.limit;
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
         if (limitLeft < 0) {
             limitLeft = 0;
         }
 
-        if (limit <= 0) {
+        if (moveEntity.limit <= 0) {
             limitLeft = 0;
         }
 
-        for (int i = currentColumn; i >= limitLeft; i--) {
-            if (i == currentColumn) {
+        for (int i = moveEntity.coordinatesEntity.currentColumn; i >= limitLeft; i--) {
+            if (i == moveEntity.coordinatesEntity.currentColumn) {
                 continue;
             }
-            moves.add(new int[]{currentLine, i});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, moveEntity.coordinatesEntity.currentLine, i));
         }
 
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по горизонтали справа(если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по горизонтали справа(если limit <= 0)
      * Если limit > 0 - получим все ходы (не выходящие за пределы доски) справа с указанным лимитом
      */
-    public int[][] getAllHorizontalRightMoves(int limit) {
-        int limitRight = currentColumn + limit;
-        List<int[]> moves = new ArrayList<>();
+    public List<CoordinatesEntity> getAllHorizontalRightMoves(MoveEntity moveEntity) {
+        int limitRight = moveEntity.coordinatesEntity.currentColumn + moveEntity.limit;
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
         if (limitRight >= ChessBoard.COLUMNS - 1) {
             limitRight = ChessBoard.COLUMNS - 1;
         }
 
-        if (limit <= 0) {
+        if (moveEntity.limit <= 0) {
             limitRight = ChessBoard.COLUMNS - 1;
         }
 
-        for (int i = currentColumn; i <= limitRight; i++) {
-            if (i == currentColumn) {
+        for (int i = moveEntity.coordinatesEntity.currentColumn; i <= limitRight; i++) {
+            if (i == moveEntity.coordinatesEntity.currentColumn) {
                 continue;
             }
-            moves.add(new int[]{currentLine, i});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, moveEntity.coordinatesEntity.currentLine, i));
         }
 
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по вертикали снизу (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по вертикали снизу (если limit <= 0)
      * Если limit > 0 - получим все ходы (не выходящие за пределы доски) снизу с указанным лимитом
      */
-    public int[][] getAllVerticalDownMoves(int limit) {
-        int limitDown = currentLine - limit;
-        List<int[]> moves = new ArrayList<>();
+    public List<CoordinatesEntity> getAllVerticalDownMoves(MoveEntity moveEntity) {
+        int limitDown = moveEntity.coordinatesEntity.currentLine - moveEntity.limit;
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
         if (limitDown < 0) {
             limitDown = 0;
         }
 
-        if (limit <= 0) {
+        if (moveEntity.limit <= 0) {
             limitDown = 0;
         }
 
-        for (int i = currentLine; i >= limitDown; i--) {
-            if (i == currentLine) {
+        for (int i = moveEntity.coordinatesEntity.currentLine; i >= limitDown; i--) {
+            if (i == moveEntity.coordinatesEntity.currentLine) {
                 continue;
             }
-            moves.add(new int[]{i, currentColumn});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, i, moveEntity.coordinatesEntity.currentColumn));
         }
 
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по вертикали сверху (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по вертикали сверху (если limit <= 0)
      * Если limit > 0 - получим все ходы (не выходящие за пределы доски) сверху с указанным лимитом
      */
-    public int[][] getAllVerticalUpMoves(int limit) {
-        int limitUp = currentLine + limit;
-        List<int[]> moves = new ArrayList<>();
+    public List<CoordinatesEntity> getAllVerticalUpMoves(MoveEntity moveEntity) {
+        int limitUp = moveEntity.coordinatesEntity.currentLine + moveEntity.limit;
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
         if (limitUp >= ChessBoard.LINES - 1) {
             limitUp = ChessBoard.LINES - 1;
         }
 
-        if (limit <= 0) {
+        if (moveEntity.limit <= 0) {
             limitUp = ChessBoard.LINES - 1;
         }
 
-        for (int i = currentLine; i <= limitUp; i++) {
-            if (i == currentLine) {
+        for (int i = moveEntity.coordinatesEntity.currentLine; i <= limitUp; i++) {
+            if (i == moveEntity.coordinatesEntity.currentLine) {
                 continue;
             }
-            moves.add(new int[]{i, currentColumn});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, i, moveEntity.coordinatesEntity.currentColumn));
         }
 
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по диагонали NE северо-восток (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по диагонали NE северо-восток (если limit <= 0)
      * Если limit > 0 - получим все ходы, не выходящие за пределы доски, с указанным лимитом
      */
-    public int[][] getAllDiagonalNEMoves(int limit) {
+    public List<CoordinatesEntity> getAllDiagonalNEMoves(MoveEntity moveEntity) {
+        int limit = moveEntity.limit;
         if (limit <= 0) {
             limit = ChessBoard.COLUMNS;
         }
 
-        List<int[]> moves = new ArrayList<>();
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
         for (int i = 1; i <= limit; i++) {
-            int newLine = currentLine + i;
-            int newColumn = currentColumn + i;
+            int newLine = moveEntity.coordinatesEntity.currentLine + i;
+            int newColumn = moveEntity.coordinatesEntity.currentColumn + i;
 
             if (newLine >= ChessBoard.LINES || newColumn >= ChessBoard.COLUMNS) {
                 break;
             }
 
-            moves.add(new int[]{newLine, newColumn});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, newLine, newColumn));
         }
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по диагонали SW юго-запад (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по диагонали SW юго-запад (если limit <= 0)
      * Если limit > 0 - получим все ходы, не выходящие за пределы доски, с указанным лимитом
      */
-    public int[][] getAllDiagonalSWMoves(int limit) {
+    public List<CoordinatesEntity> getAllDiagonalSWMoves(MoveEntity moveEntity) {
+        int limit = moveEntity.limit;
         if (limit <= 0) {
             limit = ChessBoard.COLUMNS;
         }
 
-        List<int[]> moves = new ArrayList<>();
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
         for (int i = 1; i <= limit; i++) {
-            int newLine = currentLine - i;
-            int newColumn = currentColumn - i;
+            int newLine = moveEntity.coordinatesEntity.currentLine - i;
+            int newColumn = moveEntity.coordinatesEntity.currentColumn - i;
 
             if (newLine < 0 || newColumn < 0) {
                 break;
             }
 
-            moves.add(new int[]{newLine, newColumn});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, newLine, newColumn));
         }
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по диагонали NW северо-запад (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по диагонали NW северо-запад (если limit <= 0)
      * Если limit > 0 - получим все ходы, не выходящие за пределы доски, с указанным лимитом
      */
-    public int[][] getAllDiagonalNWMoves(int limit) {
-        int limitNW = currentLine + limit;
-        if (limitNW >= ChessBoard.COLUMNS - 1 || limit <= 0) {
+    public List<CoordinatesEntity> getAllDiagonalNWMoves(MoveEntity moveEntity) {
+        int limitNW = moveEntity.coordinatesEntity.currentLine + moveEntity.limit;
+        if (limitNW >= ChessBoard.COLUMNS - 1 || moveEntity.limit <= 0) {
             limitNW = ChessBoard.COLUMNS - 1;
         }
 
-        List<int[]> moves = new ArrayList<>();
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
-        for (int i = currentLine; i <= limitNW; i++) {
-            if (i == currentLine) {
+        for (int i = moveEntity.coordinatesEntity.currentLine; i <= limitNW; i++) {
+            if (i == moveEntity.coordinatesEntity.currentLine) {
                 continue;
             }
 
-            int column = (currentColumn - i) + currentLine;
+            int column = (moveEntity.coordinatesEntity.currentColumn - i) + moveEntity.coordinatesEntity.currentLine;
             if (column < 0) {
                 continue;
             }
 
-            moves.add(new int[]{i, column});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, i, column));
         }
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 
     /**
-     * Получить все ходы по диагонали SE юго-восток (если limit <= 0)
+     * Получить все ходы (от текущей клетки до клетки назначения) по диагонали SE юго-восток (если limit <= 0)
      * Если limit > 0 - получим все ходы, не выходящие за пределы доски, с указанным лимитом
      */
-    public int[][] getAllDiagonalSEMoves(int limit) {
-        int limitSE = currentLine - limit;
-        if (limit <= 0) {
+    public List<CoordinatesEntity> getAllDiagonalSEMoves(MoveEntity moveEntity) {
+        int limitSE = moveEntity.coordinatesEntity.currentLine - moveEntity.limit;
+        if (moveEntity.limit <= 0) {
             limitSE = -ChessBoard.LINES;
         }
 
-        List<int[]> moves = new ArrayList<>();
+        List<CoordinatesEntity> xyList = new ArrayList<>();
 
-        for (int i = currentLine; i >= limitSE; i--) {
-            if (i == currentLine) {
+        for (int i = moveEntity.coordinatesEntity.currentLine; i >= limitSE; i--) {
+            if (i == moveEntity.coordinatesEntity.currentLine) {
                 continue;
             }
 
-            int column = (currentColumn - i) + currentLine;
+            int column = (moveEntity.coordinatesEntity.currentColumn - i) + moveEntity.coordinatesEntity.currentLine;
 
             if (i < 0 || column >= ChessBoard.COLUMNS) {
                 continue;
             }
-            moves.add(new int[]{i, column});
+            xyList.add(new CoordinatesEntity(moveEntity.coordinatesEntity.currentLine, moveEntity.coordinatesEntity.currentColumn, i, column));
         }
-        return moves.toArray(new int[moves.size()][]);
+        return xyList;
     }
 }

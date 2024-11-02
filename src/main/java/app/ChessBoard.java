@@ -2,11 +2,13 @@ package app;
 
 import app.ChessPieces.*;
 import app.Entity.CoordinatesEntity;
-import app.Entity.MoveEntity;
 import app.Entity.UserInputEntity;
 import app.Exception.BoardException;
+import app.Exception.CannotAttackException;
+import app.Exception.CannotMoveException;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 import static app.Exception.BoardException.*;
@@ -30,23 +32,60 @@ public class ChessBoard {
     public boolean moveToPosition(UserInputEntity userInputEntity) throws Exception {
         CoordinatesEntity xy = userInputEntity.moveEntity.coordinatesEntity;
         Optional<ChessPiece> chessPiece = getChessPiece(xy.currentLine, xy.currentColumn);
+
         if (chessPiece.isEmpty()){
             throw new BoardException(xy, MESSAGE_CHESS_PIECE_NOT_FOUND);
         }
 
         if (!nowPlayer.equals(chessPiece.get().getColor())) {
-           throw new BoardException(xy, MESSAGE_IS_NOT_YOUR_PIECE);
+            throw new BoardException(xy, MESSAGE_IS_NOT_YOUR_PIECE);
         }
 
         if (chessPiece.get().canMoveToPosition(this, userInputEntity.moveEntity)) {
-            chessPiece.get().currentLine = xy.toLine;
-            chessPiece.get().currentColumn = xy.toColumn;
-            setChessPiece(chessPiece, xy.toLine ,xy.toColumn); // if piece can move, we moved a piece
-            setChessPiece(Optional.empty(), xy.currentLine, xy.currentColumn);  // set null to previous cell
+            movePiece(chessPiece.get(), xy);
             return true;
         }
 
         return false;
+    }
+
+    public boolean attackPiece(UserInputEntity userInputEntity) throws BoardException, CannotMoveException, CannotAttackException {
+        // todo практически дублирует moveToPosition
+        CoordinatesEntity xy = userInputEntity.moveEntity.coordinatesEntity;
+        Optional<ChessPiece> chessPiece = getChessPiece(xy.currentLine, xy.currentColumn);
+
+        if (chessPiece.isEmpty()){
+            throw new BoardException(xy, MESSAGE_CHESS_PIECE_NOT_FOUND);
+        }
+
+        if (!nowPlayer.equals(chessPiece.get().getColor())) {
+            throw new BoardException(xy, MESSAGE_IS_NOT_YOUR_PIECE);
+        }
+
+        if (chessPiece.get().canAttack(this, userInputEntity.moveEntity)) {
+            movePiece(chessPiece.get(), xy);
+            return true;
+        }
+
+        return true;
+    }
+
+    /**
+     * Проверить существует ли вражеский король
+     */
+    public boolean checkOppositeKingExist() {
+        boolean kingExist = false;
+        for (ChessPiece[] pieces : board) {
+            for (ChessPiece piece : pieces) {
+                if (piece == null){
+                    continue;
+                }
+                if (Objects.equals(piece.color, getOppositePlayerColor()) && Objects.equals(piece.getSymbol(), King.SYMBOL)){
+                    return true;
+                }
+            }
+        }
+        return kingExist;
     }
 
     /**
@@ -89,6 +128,10 @@ public class ChessBoard {
         System.out.print("Ход игрока " + nowPlayer + ":: ");
     }
 
+    public String getOppositePlayerColor(){
+        return this.nowPlayerColor().equals(ChessPiece.COLOR_WHITE) ? ChessPiece.COLOR_BLACK : ChessPiece.COLOR_WHITE;
+    }
+
     public Optional<ChessPiece> getChessPiece(int line, int column) {
         if (board[line][column] == null) {
             return Optional.empty();
@@ -119,5 +162,22 @@ public class ChessBoard {
 
     protected void showColumnsName() {
         System.out.println("\t" + String.join("\t", columnsName));
+    }
+
+    protected void movePiece(ChessPiece chessPiece, CoordinatesEntity xy){
+        chessPiece.currentLine = xy.toLine;
+        chessPiece.currentColumn = xy.toColumn;
+        setChessPiece(Optional.of(chessPiece), xy.toLine ,xy.toColumn); // if piece can move, we moved a piece
+        setChessPiece(Optional.empty(), xy.currentLine, xy.currentColumn);  // set null to previous cell
+    }
+
+    protected void checkCurrentUserColor(Optional<ChessPiece> chessPiece, CoordinatesEntity xy) throws BoardException {
+        if (chessPiece.isEmpty()){
+            throw new BoardException(xy, MESSAGE_CHESS_PIECE_NOT_FOUND);
+        }
+
+        if (!nowPlayer.equals(chessPiece.get().getColor())) {
+            throw new BoardException(xy, MESSAGE_IS_NOT_YOUR_PIECE);
+        }
     }
 }
