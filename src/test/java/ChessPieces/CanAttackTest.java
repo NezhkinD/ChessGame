@@ -1,6 +1,6 @@
 package ChessPieces;
 
-import ChessPieces.data.move.TestCase;
+import ChessPieces.data.attack.TestCase;
 import app.ChessBoard;
 import app.ChessPieces.*;
 import app.Entity.CoordinatesEntity;
@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(DataProviderRunner.class)
-public class CanMoveToPositionTest extends BaseChessPiecesTest {
+public class CanAttackTest extends BaseChessPiecesTest {
     ObjectMapper objectMapper = new ObjectMapper();
-    String jsonTestCasePath = "/src/test/java/ChessPieces/data/move/";
+    String jsonTestCasePath = "/src/test/java/ChessPieces/data/attack/";
 
     @Test()
     @UseDataProvider("loadData")
@@ -30,11 +30,12 @@ public class CanMoveToPositionTest extends BaseChessPiecesTest {
             ChessPiece chessPiece,
             String fileName
     ) throws IOException {
-        File file = new File( System.getProperty("user.dir") + jsonTestCasePath + fileName);
-        List<TestCase> chessPieceMoves = objectMapper.readValue(file, new TypeReference<>(){});
-        ChessBoard board = createEmptyBoard(Optional.empty());
+        File file = new File(System.getProperty("user.dir") + jsonTestCasePath + fileName);
+        List<TestCase> chessPieceAttacks = objectMapper.readValue(file, new TypeReference<>() {
+        });
+        ChessBoard board = createBaseBoardBlackOnly(Optional.empty());
 
-        for (TestCase moves : chessPieceMoves) {
+        for (TestCase moves : chessPieceAttacks) {
             try {
                 CoordinatesEntity xy = new CoordinatesEntity(moves.current, moves.to);
                 MoveEntity moveEntity = new MoveEntity(xy);
@@ -43,9 +44,9 @@ public class CanMoveToPositionTest extends BaseChessPiecesTest {
                 chessPiece.currentLine = xy.currentLine;
                 chessPiece.currentColumn = xy.currentColumn;
 
-                Assert.assertTrue(chessPiece.canMoveToPosition(board, moveEntity));
-            } catch (Throwable t){
-                Assert.assertFalse("ID:" + moves.id + " " + t.getMessage(), moves.canMove);
+                Assert.assertTrue(chessPiece.canAttack(board, moveEntity));
+            } catch (Throwable t) {
+                Assert.assertFalse("ID:" + moves.id + " " + t.getMessage(), moves.canAttack);
             }
         }
     }
@@ -62,6 +63,10 @@ public class CanMoveToPositionTest extends BaseChessPiecesTest {
                         "king.json"
                 },
                 {
+                        new Horse(ChessPiece.COLOR_WHITE, 0, 0),
+                        "horse.json"
+                },
+                {
                         new Queen(ChessPiece.COLOR_WHITE, 0, 0),
                         "queen.json"
                 },
@@ -73,10 +78,7 @@ public class CanMoveToPositionTest extends BaseChessPiecesTest {
                         new Bishop(ChessPiece.COLOR_WHITE, 0, 0),
                         "bishop.json"
                 },
-                {
-                        new Horse(ChessPiece.COLOR_WHITE, 0, 0),
-                        "horse.json"
-                }
+
         };
     }
 }

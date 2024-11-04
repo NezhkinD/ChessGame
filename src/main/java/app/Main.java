@@ -126,13 +126,13 @@ public class Main {
 //        board.board[0][0] = new Rook(ChessPiece.COLOR_WHITE, 0, 0);
 //        board.board[0][1] = new Horse(ChessPiece.COLOR_WHITE, 0, 1);
 //        board.board[0][2] = new Bishop(ChessPiece.COLOR_WHITE, 0, 2);
-        board.board[6][3] = new Queen(ChessPiece.COLOR_WHITE, 6, 3);
+//        board.board[6][3] = new Queen(ChessPiece.COLOR_WHITE, 6, 3);
         board.board[0][4] = new King(ChessPiece.COLOR_WHITE, 0, 4);
 //        board.board[0][5] = new Bishop(ChessPiece.COLOR_WHITE, 0, 5);
-//        board.board[0][6] = new Horse(ChessPiece.COLOR_WHITE, 0, 6);
+//        board.board[6][3] = new Horse(ChessPiece.COLOR_WHITE, 6, 3);
 //        board.board[0][7] = new Rook(ChessPiece.COLOR_WHITE, 0, 7);
 //        board.board[1][0] = new Pawn(ChessPiece.COLOR_WHITE, 1, 0);
-//        board.board[1][1] = new Pawn(ChessPiece.COLOR_WHITE, 1, 1);
+        board.board[6][3] = new Pawn(ChessPiece.COLOR_WHITE, 6, 3);
 //        board.board[1][2] = new Pawn(ChessPiece.COLOR_WHITE, 1, 2);
 //        board.board[1][3] = new Pawn(ChessPiece.COLOR_WHITE, 1, 3);
 //        board.board[1][4] = new Pawn(ChessPiece.COLOR_WHITE, 1, 4);

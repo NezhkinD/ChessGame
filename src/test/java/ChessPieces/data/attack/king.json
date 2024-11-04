@@ -1,0 +1,261 @@
+[
+  {
+    "id": 1,
+    "current": "a5",
+    "to": "a6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 2,
+    "current": "a5",
+    "to": "b6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 3,
+    "current": "a5",
+    "to": "b5",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 4,
+    "current": "a5",
+    "to": "a7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 5,
+    "current": "b5",
+    "to": "a6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 6,
+    "current": "b5",
+    "to": "b6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 7,
+    "current": "b5",
+    "to": "c6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 8,
+    "current": "b5",
+    "to": "c5",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 9,
+    "current": "b5",
+    "to": "a4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 10,
+    "current": "c5",
+    "to": "b6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 11,
+    "current": "c5",
+    "to": "c6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 12,
+    "current": "c5",
+    "to": "d6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 13,
+    "current": "c5",
+    "to": "d5",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 14,
+    "current": "c5",
+    "to": "d7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 15,
+    "current": "d5",
+    "to": "c6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 16,
+    "current": "d5",
+    "to": "d6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 17,
+    "current": "d5",
+    "to": "e6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 18,
+    "current": "d5",
+    "to": "e5",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 19,
+    "current": "d5",
+    "to": "d7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 20,
+    "current": "e5",
+    "to": "d6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 21,
+    "current": "e5",
+    "to": "e6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 22,
+    "current": "e5",
+    "to": "f6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 23,
+    "current": "e5",
+    "to": "f6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 24,
+    "current": "e5",
+    "to": "g7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 25,
+    "current": "f5",
+    "to": "e6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 26,
+    "current": "f5",
+    "to": "f6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 27,
+    "current": "f5",
+    "to": "g6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 28,
+    "current": "f5",
+    "to": "g6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 29,
+    "current": "f5",
+    "to": "f7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 30,
+    "current": "g5",
+    "to": "f6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 31,
+    "current": "g5",
+    "to": "g6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 32,
+    "current": "g5",
+    "to": "h6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 33,
+    "current": "g5",
+    "to": "h5",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 34,
+    "current": "g5",
+    "to": "g7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 35,
+    "current": "h5",
+    "to": "g6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 36,
+    "current": "h5",
+    "to": "h6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 37,
+    "current": "h5",
+    "to": "g4",
+    "canAttack": false,
+    "color": "white"
+  }
+]

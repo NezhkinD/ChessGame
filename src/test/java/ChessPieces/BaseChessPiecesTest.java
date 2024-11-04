@@ -10,6 +10,29 @@ abstract public class BaseChessPiecesTest {
         return new ChessBoard(nowPlayerColor.orElse(ChessPiece.COLOR_WHITE));
     }
 
+    protected static ChessBoard createBaseBoardBlackOnly(Optional<String> nowPlayerColor) {
+
+        ChessBoard board = new ChessBoard(nowPlayerColor.orElse(ChessPiece.COLOR_WHITE));
+
+        board.board[7][0] = new Rook(ChessPiece.COLOR_BLACK, 7, 0);
+        board.board[7][1] = new Horse(ChessPiece.COLOR_BLACK, 7, 1);
+        board.board[7][2] = new Bishop(ChessPiece.COLOR_BLACK, 7, 2);
+        board.board[7][3] = new Queen(ChessPiece.COLOR_BLACK, 7, 3);
+        board.board[7][4] = new King(ChessPiece.COLOR_BLACK, 7, 4);
+        board.board[7][5] = new Bishop(ChessPiece.COLOR_BLACK, 7, 5);
+        board.board[7][6] = new Horse(ChessPiece.COLOR_BLACK, 7, 6);
+        board.board[7][7] = new Rook(ChessPiece.COLOR_BLACK, 7, 7);
+        board.board[6][0] = new Pawn(ChessPiece.COLOR_BLACK, 6, 0);
+        board.board[6][1] = new Pawn(ChessPiece.COLOR_BLACK, 6, 1);
+        board.board[6][2] = new Pawn(ChessPiece.COLOR_BLACK, 6, 2);
+        board.board[6][3] = new Pawn(ChessPiece.COLOR_BLACK, 6, 3);
+        board.board[6][4] = new Pawn(ChessPiece.COLOR_BLACK, 6, 4);
+        board.board[6][5] = new Pawn(ChessPiece.COLOR_BLACK, 6, 5);
+        board.board[6][6] = new Pawn(ChessPiece.COLOR_BLACK, 6, 6);
+        board.board[6][7] = new Pawn(ChessPiece.COLOR_BLACK, 6, 7);
+        return board;
+    }
+
     protected static ChessBoard createBaseBoard(Optional<String> nowPlayerColor) {
 
         ChessBoard board = new ChessBoard(nowPlayerColor.orElse(ChessPiece.COLOR_WHITE));

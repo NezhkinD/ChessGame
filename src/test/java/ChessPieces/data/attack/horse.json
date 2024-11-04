@@ -1,0 +1,275 @@
+[
+  {
+    "id": 0,
+    "current": "c3",
+    "to": "d5",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 1,
+    "current": "a5",
+    "to": "b7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 2,
+    "current": "a5",
+    "to": "c6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 3,
+    "current": "a5",
+    "to": "c4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 4,
+    "current": "a5",
+    "to": "c6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 5,
+    "current": "b4",
+    "to": "a6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 6,
+    "current": "b5",
+    "to": "c7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 7,
+    "current": "b5",
+    "to": "d6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 8,
+    "current": "b5",
+    "to": "d4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 9,
+    "current": "b5",
+    "to": "c3",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 10,
+    "current": "c5",
+    "to": "a6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 11,
+    "current": "c5",
+    "to": "b7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 12,
+    "current": "c5",
+    "to": "e6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 13,
+    "current": "c5",
+    "to": "e4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 14,
+    "current": "c5",
+    "to": "e6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 15,
+    "current": "d5",
+    "to": "b6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 16,
+    "current": "d5",
+    "to": "c7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 17,
+    "current": "d5",
+    "to": "f6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 18,
+    "current": "d5",
+    "to": "f4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 19,
+    "current": "d5",
+    "to": "e7",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 20,
+    "current": "e5",
+    "to": "c6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 21,
+    "current": "e5",
+    "to": "d7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 22,
+    "current": "e5",
+    "to": "g6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 23,
+    "current": "e5",
+    "to": "g4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 24,
+    "current": "e5",
+    "to": "c4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 25,
+    "current": "f5",
+    "to": "d6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 26,
+    "current": "f5",
+    "to": "e7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 27,
+    "current": "f5",
+    "to": "h6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 28,
+    "current": "f5",
+    "to": "h4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 29,
+    "current": "f5",
+    "to": "d4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 30,
+    "current": "g5",
+    "to": "e6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 31,
+    "current": "g5",
+    "to": "f7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 32,
+    "current": "g5",
+    "to": "h7",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 33,
+    "current": "g5",
+    "to": "e6",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 34,
+    "current": "g5",
+    "to": "e4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 35,
+    "current": "h5",
+    "to": "f6",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 36,
+    "current": "h5",
+    "to": "g7",
+    "canAttack": true,
+    "color": "white"
+  },
+  {
+    "id": 37,
+    "current": "h5",
+    "to": "f4",
+    "canAttack": false,
+    "color": "white"
+  },
+  {
+    "id": 38,
+    "current": "h5",
+    "to": "g3",
+    "canAttack": false,
+    "color": "white"
+  }
+]

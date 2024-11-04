@@ -28,7 +28,6 @@ public class Bishop extends ChessPiece {
 
     @Override
     public boolean canAttack(ChessBoard chessBoard, MoveEntity moveEntity) throws CannotAttackException, CannotMoveException {
-        // todo изменить логику атаки
         checkAttack(chessBoard, moveEntity);
         return true;
     }

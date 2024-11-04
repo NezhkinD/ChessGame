@@ -1,4 +1,4 @@
-package ChessPieces.data;
+package ChessPieces.data.move;
 
 public class TestCase {
     public int id;

@@ -10,7 +10,6 @@ public class CannotMoveException extends Exception {
     final public static String MESSAGE_UNDEFINE_MOVE = "Не определена траектория движения фигуры";
     final public static String MESSAGE_NOT_POSSIBLE_MOVE_PAWN = "Только в первый ход пешка может сделать движение на 2 клетки вперед";
     final public static String MESSAGE_NOT_POSSIBLE_MOVE_KING = "Король может перемещаться только на одну клетку";
-    final public static String MESSAGE_CURRENT_LOCATION_EQ_TO_LOCATION = "Указанные координаты перемещения, соответствуют текущему положению фигуры";
 
     public CannotMoveException(ChessPiece chessPiece, int toLine, int toColumn, String message) {
         super("Текущая фигура " + chessPiece.getSymbolWithColor() + ": перемещение из клетки " + chessPiece.currentLine + "-" + chessPiece.currentColumn + " в клетку " + toLine + "-" + toColumn + " невозможно: " + message);

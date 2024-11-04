@@ -63,6 +63,10 @@ public class ChessBoard {
         }
 
         if (chessPiece.get().canAttack(this, userInputEntity.moveEntity)) {
+            if (getChessPiece(xy.toLine, xy.toColumn).isPresent()){
+                System.out.println(chessPiece.get().getSymbolWithColor() + " уничтожил " + getChessPiece(xy.toLine, xy.toColumn).get().getSymbolWithColor() + "\n");
+            }
+
             movePiece(chessPiece.get(), xy);
             return true;
         }
@@ -111,6 +115,10 @@ public class ChessBoard {
         System.out.println("Player 1(" + ChessPiece.COLOR_WHITE + ")");
     }
 
+    /**
+     * todo delete
+     * @deprecated
+     */
     public boolean checkPosition(int pos) {
         return pos >= 0 && pos < LINES;
     }
@@ -148,6 +156,10 @@ public class ChessBoard {
         board[line][column] = chessPiece.get();
     }
 
+    /**
+     * todo delete
+     * @deprecated
+     */
     public CoordinatesEntity mapCoordinatesFromString(String from, String to){
         char[] currentLocation = from.toCharArray();
         int currentColumn = Arrays.asList(ChessBoard.columnsName).indexOf(String.valueOf(currentLocation[0]));
@@ -171,6 +183,10 @@ public class ChessBoard {
         setChessPiece(Optional.empty(), xy.currentLine, xy.currentColumn);  // set null to previous cell
     }
 
+    /**
+     * todo delete
+     * @deprecated
+     */
     protected void checkCurrentUserColor(Optional<ChessPiece> chessPiece, CoordinatesEntity xy) throws BoardException {
         if (chessPiece.isEmpty()){
             throw new BoardException(xy, MESSAGE_CHESS_PIECE_NOT_FOUND);
