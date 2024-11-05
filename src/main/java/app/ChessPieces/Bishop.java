@@ -6,7 +6,7 @@ import app.Enum.VectorEnum;
 import app.Exception.CannotAttackException;
 import app.Exception.CannotMoveException;
 
-import static app.Exception.CannotMoveException.*;
+import static app.Exception.CannotMoveException.MESSAGE_NOT_POSSIBLE_MOVE;
 
 public class Bishop extends ChessPiece {
     public static String SYMBOL = "B";

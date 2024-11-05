@@ -9,7 +9,8 @@ import app.Exception.CannotMoveException;
 import java.util.Objects;
 
 import static app.Exception.CannotAttackException.MESSAGE_CANNOT_ATTACK;
-import static app.Exception.CannotMoveException.*;
+import static app.Exception.CannotMoveException.MESSAGE_NOT_POSSIBLE_MOVE;
+import static app.Exception.CannotMoveException.MESSAGE_NOT_POSSIBLE_MOVE_PAWN;
 
 public class Pawn extends ChessPiece {
     public static String SYMBOL = "P";

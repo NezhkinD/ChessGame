@@ -18,8 +18,8 @@ public class CoordinatesEntity {
         this.toLine = toLine;
         this.toColumn = toColumn;
 
-        this.userViewCurrent = ""; //todo
-        this.userViewTo = ""; //todo
+        this.userViewCurrent = ""; // todo
+        this.userViewTo = ""; // todo
     }
 
     public CoordinatesEntity(String from, String to) {

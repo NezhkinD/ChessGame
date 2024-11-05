@@ -4,6 +4,7 @@ import app.ChessPieces.ChessPiece;
 import app.Entity.CoordinatesEntity;
 
 public class CannotAttackException extends Exception {
+    final public static String MESSAGE_SOMETHING_WRONG = "Что-то пошло не так";
     final public static String MESSAGE_NOT_PIECE_TO_ATTACK = "Нет фигуры для атаки";
     final public static String MESSAGE_CANNOT_ATTACK = "Указана неверная траектория атаки для фигуры";
     final public static String MESSAGE_PIECE_NOT_FOUND = "Не найдена фигура для атаки";
@@ -15,5 +16,9 @@ public class CannotAttackException extends Exception {
 
     public CannotAttackException(CoordinatesEntity xy, String message) {
         super("Атака из " + xy.userViewCurrent + " в " + xy.userViewTo + " невозможна: " + message);
+    }
+
+    public CannotAttackException(String message) {
+        super("Атака не удалась: " + message);
     }
 }

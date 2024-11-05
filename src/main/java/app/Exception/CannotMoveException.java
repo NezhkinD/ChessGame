@@ -4,6 +4,7 @@ import app.ChessPieces.ChessPiece;
 import app.Entity.CoordinatesEntity;
 
 public class CannotMoveException extends Exception {
+    final public static String MESSAGE_SOMETHING_WRONG = "Что-то пошло не так";
     final public static String MESSAGE_BOARD_LIMIT = "Перемещение в клетку назначение, приведет к выходу за пределы доски";
     final public static String MESSAGE_PIECE_BLOCK_MOVE = "Перемещению мешает другая фигура";
     final public static String MESSAGE_NOT_POSSIBLE_MOVE = "Указана неверная траектория движения для фигуры";
@@ -17,5 +18,9 @@ public class CannotMoveException extends Exception {
 
     public CannotMoveException(CoordinatesEntity xy, String message) {
         super("Перемещение из " + xy.userViewCurrent + " в " + xy.userViewTo + " невозможно: " + message);
+    }
+
+    public CannotMoveException(String message) {
+        super("Перемещение не удалось: " +  message);
     }
 }
