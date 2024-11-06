@@ -23,7 +23,6 @@ import java.util.Optional;
 public class CanAttackTest extends BaseChessPiecesTest {
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonTestCasePath = "/src/test/java/ChessPieces/data/attack/";
-
     @Test()
     @UseDataProvider("loadData")
     public void jsonTest(ChessPiece chessPiece, String fileName) throws IOException {

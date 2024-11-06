@@ -17,9 +17,8 @@ public class CoordinatesEntity {
         this.currentColumn = currentColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
-
-        this.userViewCurrent = ""; // todo
-        this.userViewTo = ""; // todo
+        this.userViewCurrent = ChessBoard.columnsName[currentColumn] + currentLine;
+        this.userViewTo = ChessBoard.columnsName[toColumn] + toLine;
     }
 
     public CoordinatesEntity(String from, String to) {

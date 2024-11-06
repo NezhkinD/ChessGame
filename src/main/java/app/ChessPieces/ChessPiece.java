@@ -80,11 +80,6 @@ abstract public class ChessPiece {
         if (board.getChessPiece(moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn).isEmpty()) {
             throw new CannotAttackException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_NOT_PIECE_TO_ATTACK);
         }
-        
-        // todo
-//        if (lastIndex != 0) {
-//            throw new CannotAttackException(this, moveEntity.coordinatesEntity.toLine, moveEntity.coordinatesEntity.toColumn, MESSAGE_CANNOT_ATTACK);
-//        }
 
         if (moveEntity.limit > 1){
             Optional<ChessPiece> closestChessPiece = getClosestChessPiece(board, possibleMoves);

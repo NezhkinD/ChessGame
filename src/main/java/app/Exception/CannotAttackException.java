@@ -14,10 +14,6 @@ public class CannotAttackException extends Exception {
         super("Текущая фигура " + chessPiece.getSymbolWithColor() + ": атака из клетки " + chessPiece.currentLine + "-" + chessPiece.currentColumn + " в клетку " + toLine + "-" + toColumn + " невозможна: " + message);
     }
 
-    public CannotAttackException(CoordinatesEntity xy, String message) {
-        super("Атака из " + xy.userViewCurrent + " в " + xy.userViewTo + " невозможна: " + message);
-    }
-
     public CannotAttackException(String message) {
         super("Атака не удалась: " + message);
     }

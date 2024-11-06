@@ -55,7 +55,6 @@ public class ChessBoard {
     }
 
     public boolean attackPiece(UserInputEntity userInputEntity) throws BoardException, CannotMoveException, CannotAttackException {
-        // todo практически дублирует moveToPosition
         CoordinatesEntity xy = userInputEntity.moveEntity.coordinatesEntity;
         Optional<ChessPiece> chessPiece = getChessPiece(xy.currentLine, xy.currentColumn);
 
