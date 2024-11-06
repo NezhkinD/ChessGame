@@ -26,10 +26,7 @@ public class CanAttackTest extends BaseChessPiecesTest {
 
     @Test()
     @UseDataProvider("loadData")
-    public void jsonTest(
-            ChessPiece chessPiece,
-            String fileName
-    ) throws IOException {
+    public void jsonTest(ChessPiece chessPiece, String fileName) throws IOException {
         File file = new File(System.getProperty("user.dir") + jsonTestCasePath + fileName);
         List<TestCase> chessPieceAttacks = objectMapper.readValue(file, new TypeReference<>() {
         });
